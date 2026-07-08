@@ -1,0 +1,65 @@
+@model Absensiguru.Models.Absensi
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Hapus Absensi";
+}
+
+<div class="card shadow border-0 rounded-4">
+
+    <div class="card-header bg-danger text-white">
+
+        <h3>Hapus Data Absensi</h3>
+
+    </div>
+
+    <div class="card-body">
+
+        <h5 class="mb-4">
+
+            Yakin ingin menghapus data absensi ini?
+
+        </h5>
+
+        <table class="table table-bordered">
+
+            <tr>
+                <th width="220">Guru</th>
+                <td>@Model.IdGuruNavigation.NamaGuru</td>
+            </tr>
+
+            <tr>
+                <th>Tanggal</th>
+                <td>@Model.Tanggal.ToString("dd/MM/yyyy")</td>
+            </tr>
+
+            <tr>
+                <th>Status</th>
+                <td>@Model.Status</td>
+            </tr>
+
+        </table>
+
+        <form asp-action="Delete">
+
+            <input type="hidden"
+                   asp-for="IdAbsensi"/>
+
+            <button class="btn btn-danger">
+
+                Hapus
+
+            </button>
+
+            <a asp-action="Index"
+               class="btn btn-secondary">
+
+                Batal
+
+            </a>
+
+        </form>
+
+    </div>
+
+</div>

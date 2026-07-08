@@ -1,0 +1,282 @@
+@model IEnumerable<Absensiguru.Models.Guru>
+
+@{
+    ViewData["Title"] = "Data Guru";
+
+    int no = 1;
+}
+
+<div class="container-fluid py-4">
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show shadow-sm">
+
+            <i class="fa-solid fa-circle-check me-2"></i>
+
+            @TempData["Success"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+
+        </div>
+    }
+
+    <div class="card shadow border-0 rounded-4">
+
+        <div class="card-header bg-danger text-white">
+
+            <div class="row align-items-center">
+
+                <div class="col-md-4">
+
+                    <h3 class="fw-bold mb-0">
+
+                        <i class="fa-solid fa-users me-2"></i>
+
+                        Data Guru
+
+                    </h3>
+
+                </div>
+
+                <div class="col-md-8">
+
+                    <form asp-action="Index"
+                          method="get">
+
+                        <div class="row g-2">
+
+                            <div class="col-md-6">
+
+                                <input type="text"
+                                       name="searchString"
+                                       value="@ViewBag.Search"
+                                       class="form-control"
+                                       placeholder="Cari berdasarkan Nama atau NIP..." />
+
+                            </div>
+
+                            <div class="col-auto">
+
+                                <button type="submit"
+                                        class="btn btn-light">
+
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                                    Cari
+
+                                </button>
+
+                            </div>
+
+                            <div class="col-auto">
+
+                                <a asp-action="Index"
+                                   class="btn btn-warning">
+
+                                    <i class="fa-solid fa-rotate"></i>
+
+                                    Refresh
+
+                                </a>
+
+                            </div>
+
+                            <div class="col-auto ms-auto">
+
+                                <a asp-action="Create"
+                                   class="btn btn-success">
+
+                                    <i class="fa-solid fa-plus"></i>
+
+                                    Tambah Guru
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <thead class="table-danger text-center">
+
+                        <tr>
+
+                            <th width="60">No</th>
+
+                            <th>NIP</th>
+
+                            <th>Nama Guru</th>
+
+                            <th>Jenis Kelamin</th>
+
+                            <th>Jabatan</th>
+
+                            <th>Status</th>
+
+                            <th width="230">Aksi</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @if (!Model.Any())
+                        {
+                            <tr>
+
+                                <td colspan="7"
+                                    class="text-center text-muted py-4">
+
+                                    <i class="fa-solid fa-folder-open fa-2x mb-2"></i>
+
+                                    <br />
+
+                                    Data guru tidak ditemukan.
+
+                                </td>
+
+                            </tr>
+                        }
+                        else
+                        {
+                            @foreach (var guru in Model)
+                            {
+                                <tr>
+
+                                    <td class="text-center">
+
+                                        @no
+
+                                    </td>
+
+                                    <td>
+
+                                        @guru.Nip
+
+                                    </td>
+
+                                    <td class="fw-semibold">
+
+                                        @guru.NamaGuru
+
+                                    </td>
+
+                                    <td>
+
+                                        @(guru.JenisKelamin == "L"
+                                            ? "Laki-laki"
+                                            : "Perempuan")
+
+                                    </td>
+
+                                    <td>
+
+                                        @guru.IdJabatanNavigation.NamaJabatan
+
+                                    </td>
+
+                                    <td class="text-center">
+
+                                        @if (guru.Status == "Aktif")
+                                        {
+                                            <span class="badge rounded-pill bg-success px-3">
+
+                                                Aktif
+
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge rounded-pill bg-danger px-3">
+
+                                                Nonaktif
+
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                    <td class="text-center">
+
+                                        <a asp-action="Details"
+                                           asp-route-id="@guru.IdGuru"
+                                           class="btn btn-primary btn-sm">
+
+                                            <i class="fa-solid fa-eye"></i>
+
+                                        </a>
+
+                                        <a asp-action="Edit"
+                                           asp-route-id="@guru.IdGuru"
+                                           class="btn btn-warning btn-sm text-white">
+
+                                            <i class="fa-solid fa-pen"></i>
+
+                                        </a>
+
+                                        <a asp-action="Delete"
+                                           asp-route-id="@guru.IdGuru"
+                                           class="btn btn-danger btn-sm">
+
+                                            <i class="fa-solid fa-trash"></i>
+
+                                        </a>
+
+                                    </td>
+
+                                </tr>
+
+                                no++;
+                            }
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        <div class="card-footer bg-white">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <span class="text-muted">
+
+                    Total Data :
+                    <strong>@Model.Count()</strong>
+
+                </span>
+
+                <span class="text-muted">
+
+                    Sistem Absensi Guru © 2026
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

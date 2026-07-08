@@ -1,0 +1,84 @@
+@model Absensiguru.Models.Guru
+
+@{
+    ViewData["Title"] = "Hapus Guru";
+}
+
+<div class="container py-4">
+
+    <div class="card shadow border-0 rounded-4">
+
+        <div class="card-header bg-danger text-white">
+
+            <h3 class="mb-0 fw-bold">
+                Hapus Data Guru
+            </h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="alert alert-danger">
+
+                <h5>
+                    Apakah Anda yakin ingin menghapus data guru ini?
+                </h5>
+
+                <hr />
+
+                <table class="table table-borderless">
+
+                    <tr>
+                        <th width="200">Nama Guru</th>
+                        <td>@Model.NamaGuru</td>
+                    </tr>
+
+                    <tr>
+                        <th>NIP</th>
+                        <td>@Model.Nip</td>
+                    </tr>
+
+                    <tr>
+                        <th>Jabatan</th>
+                        <td>@Model.IdJabatanNavigation.NamaJabatan</td>
+                    </tr>
+
+                    <tr>
+                        <th>Status</th>
+                        <td>@Model.Status</td>
+                    </tr>
+
+                </table>
+
+            </div>
+
+            <form asp-action="Delete">
+
+                <input type="hidden"
+                       asp-for="IdGuru" />
+
+                <div class="d-flex justify-content-between">
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary rounded-pill">
+
+                        Kembali
+
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-danger rounded-pill">
+
+                        Ya, Hapus Data
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

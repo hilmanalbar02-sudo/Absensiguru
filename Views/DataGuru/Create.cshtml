@@ -1,0 +1,205 @@
+@model Absensiguru.Models.Guru
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+@{
+    ViewData["Title"] = "Tambah Guru";
+}
+
+<div class="container py-4">
+
+    <div class="card shadow border-0 rounded-4">
+
+        <div class="card-header bg-danger text-white">
+
+            <h3 class="mb-0 fw-bold">
+                Tambah Data Guru
+            </h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Create" method="post">
+
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="NamaGuru" class="form-label fw-bold">
+                            Nama Guru
+                        </label>
+
+                        <input asp-for="NamaGuru"
+                               class="form-control"
+                               placeholder="Masukkan nama guru" />
+
+                        <span asp-validation-for="NamaGuru"
+                              class="text-danger"></span>
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="Nip" class="form-label fw-bold">
+                            NIP
+                        </label>
+
+                        <input asp-for="Nip"
+                               class="form-control"
+                               placeholder="Masukkan NIP" />
+
+                        <span asp-validation-for="Nip"
+                              class="text-danger"></span>
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="JenisKelamin" class="form-label fw-bold">
+                            Jenis Kelamin
+                        </label>
+
+                        <select asp-for="JenisKelamin" class="form-select">
+
+                            <option value="">-- Pilih Jenis Kelamin --</option>
+                            <option value="L">Laki-laki</option>
+                            <option value="P">Perempuan</option>
+
+                        </select>
+
+                        <span asp-validation-for="JenisKelamin"
+                              class="text-danger"></span>
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="IdJabatan" class="form-label fw-bold">
+                            Jabatan
+                        </label>
+
+                        <select asp-for="IdJabatan"
+                                asp-items="@(new SelectList(ViewBag.Jabatan,"IdJabatan","NamaJabatan"))"
+                                class="form-select">
+
+                            <option value="">-- Pilih Jabatan --</option>
+
+                        </select>
+
+                        <span asp-validation-for="IdJabatan"
+                              class="text-danger"></span>
+
+                    </div>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="Email" class="form-label fw-bold">
+                        Email
+                    </label>
+
+                    <input asp-for="Email"
+                           class="form-control"
+                           placeholder="Masukkan email" />
+
+                    <span asp-validation-for="Email"
+                          class="text-danger"></span>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="NoHp" class="form-label fw-bold">
+                        Nomor HP
+                    </label>
+
+                    <input asp-for="NoHp"
+                           class="form-control"
+                           placeholder="Masukkan nomor HP" />
+
+                    <span asp-validation-for="NoHp"
+                          class="text-danger"></span>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="Alamat" class="form-label fw-bold">
+                        Alamat
+                    </label>
+
+                    <textarea asp-for="Alamat"
+                              rows="3"
+                              class="form-control"
+                              placeholder="Masukkan alamat"></textarea>
+
+                    <span asp-validation-for="Alamat"
+                          class="text-danger"></span>
+
+                </div>
+
+                <div class="mb-4">
+
+                    <label asp-for="Status" class="form-label fw-bold">
+                        Status
+                    </label>
+
+                    <select asp-for="Status"
+                            class="form-select">
+
+                        <option value="Aktif">Aktif</option>
+                        <option value="Nonaktif">Nonaktif</option>
+
+                    </select>
+
+                    <span asp-validation-for="Status"
+                          class="text-danger"></span>
+
+                </div>
+
+                <hr />
+
+                <div class="d-flex justify-content-between">
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary rounded-pill px-4">
+
+                        <i class="fa-solid fa-arrow-left me-1"></i>
+                        Kembali
+
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-danger rounded-pill px-4">
+
+                        <i class="fa-solid fa-floppy-disk me-1"></i>
+                        Simpan Guru
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts{
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+}

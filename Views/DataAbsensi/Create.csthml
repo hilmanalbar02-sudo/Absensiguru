@@ -1,0 +1,188 @@
+@model IEnumerable<Absensiguru.Models.Absensi>
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Data Absensi";
+
+    int no = 1;
+}
+
+<div class="card shadow border-0 rounded-4">
+
+    <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center">
+
+        <h3 class="mb-0 fw-bold">
+            Data Absensi
+        </h3>
+
+        <a asp-action="Create" class="btn btn-light rounded-pill px-4">
+            Tambah Absensi
+        </a>
+
+    </div>
+
+    <div class="card-body">
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show">
+
+                @TempData["Success"]
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert">
+                </button>
+
+            </div>
+        }
+
+        <form method="get">
+
+            <div class="row mb-4">
+
+                <div class="col-md-8">
+
+                    <input type="text"
+                           name="searchString"
+                           value="@ViewBag.Search"
+                           class="form-control"
+                           placeholder="Cari nama guru atau status..." />
+
+                </div>
+
+                <div class="col-md-2">
+
+                    <button class="btn btn-danger w-100">
+                        Cari
+                    </button>
+
+                </div>
+
+            </div>
+
+        </form>
+
+        <div class="table-responsive">
+
+            <table class="table table-bordered table-hover align-middle">
+
+                <thead class="table-danger text-center">
+
+                    <tr>
+
+                        <th>No</th>
+
+                        <th>Nama Guru</th>
+
+                        <th>Tanggal</th>
+
+                        <th>Masuk</th>
+
+                        <th>Pulang</th>
+
+                        <th>Status</th>
+
+                        <th>Keterangan</th>
+
+                        <th width="150">
+                            Aksi
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td class="text-center">
+                                @(no++)
+                            </td>
+
+                            <td>
+                                @item.IdGuruNavigation.NamaGuru
+                            </td>
+
+                            <td class="text-center">
+                                @item.Tanggal.ToString("dd/MM/yyyy")
+                            </td>
+
+                            <td class="text-center">
+                                @(item.JamMasuk.HasValue ? item.JamMasuk.Value.ToString("HH\\:mm") : "-")
+                            </td>
+
+                            <td class="text-center">
+                                @(item.JamPulang.HasValue ? item.JamPulang.Value.ToString("HH\\:mm") : "-")
+                            </td>
+
+                            <td class="text-center">
+
+                                @if (item.Status == "Hadir")
+                                {
+                                    <span class="badge bg-success">
+                                        Hadir
+                                    </span>
+                                }
+                                else if (item.Status == "Izin")
+                                {
+                                    <span class="badge bg-warning text-dark">
+                                        Izin
+                                    </span>
+                                }
+                                else if (item.Status == "Sakit")
+                                {
+                                    <span class="badge bg-info">
+                                        Sakit
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">
+                                        Alpha
+                                    </span>
+                                }
+
+                            </td>
+
+                            <td>
+                                @item.Keterangan
+                            </td>
+
+                            <td class="text-center">
+
+                                <a asp-action="Details"
+                                   asp-route-id="@item.IdAbsensi"
+                                   class="btn btn-primary btn-sm">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+
+                                <a asp-action="Edit"
+                                   asp-route-id="@item.IdAbsensi"
+                                   class="btn btn-warning btn-sm">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+
+                                <a asp-action="Delete"
+                                   asp-route-id="@item.IdAbsensi"
+                                   class="btn btn-danger btn-sm">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>

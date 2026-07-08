@@ -1,0 +1,139 @@
+@model Absensiguru.Models.Izin
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Tambah Data Izin";
+}
+
+<div class="card shadow border-0 rounded-4">
+
+    <div class="card-header bg-danger text-white">
+
+        <h3 class="mb-0">
+            Tambah Data Izin
+        </h3>
+
+    </div>
+
+    <div class="card-body">
+
+        <form asp-action="Create" enctype="multipart/form-data">
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger mb-3">
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label fw-bold">
+                    Guru
+                </label>
+
+                <select asp-for="IdGuru"
+                        class="form-select"
+                        asp-items="ViewBag.IdGuru">
+
+                    <option value="">
+                        -- Pilih Guru --
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label asp-for="Tanggal"
+                       class="form-label fw-bold">
+                </label>
+
+                <input asp-for="Tanggal"
+                       type="date"
+                       class="form-control" />
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label fw-bold">
+                    Jenis Izin
+                </label>
+
+                <select asp-for="JenisIzin"
+                        class="form-select">
+
+                    <option>Izin</option>
+
+                    <option>Sakit</option>
+
+                    <option>Cuti</option>
+
+                </select>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label asp-for="Alasan"
+                       class="form-label fw-bold">
+                </label>
+
+                <textarea asp-for="Alasan"
+                          class="form-control"
+                          rows="4"></textarea>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label fw-bold">
+                    Bukti
+                </label>
+
+                <input type="file"
+                       name="uploadFile"
+                       class="form-control" />
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label fw-bold">
+                    Status
+                </label>
+
+                <select asp-for="Status"
+                        class="form-select">
+
+                    <option>Menunggu</option>
+
+                    <option>Disetujui</option>
+
+                    <option>Ditolak</option>
+
+                </select>
+
+            </div>
+
+            <button class="btn btn-danger">
+                Simpan
+            </button>
+
+            <a asp-action="Index"
+               class="btn btn-secondary">
+
+                Kembali
+
+            </a>
+
+        </form>
+
+    </div>
+
+</div>
+
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,84 @@
+@model Absensiguru.Models.Jabatan
+
+@{
+    ViewData["Title"] = "Tambah Jabatan";
+}
+
+<div class="container py-4">
+
+    <div class="card shadow border-0 rounded-4">
+
+        <div class="card-header bg-danger text-white">
+
+            <h3 class="mb-0 fw-bold">
+                Tambah Data Jabatan
+            </h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Create" method="post">
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3">
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="NamaJabatan"
+                           class="form-label fw-bold">
+
+                        Nama Jabatan
+
+                    </label>
+
+                    <input asp-for="NamaJabatan"
+                           class="form-control"
+                           placeholder="Masukkan nama jabatan" />
+
+                    <span asp-validation-for="NamaJabatan"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+                <hr />
+
+                <div class="d-flex justify-content-between">
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary rounded-pill px-4">
+
+                        <i class="fa-solid fa-arrow-left me-1"></i>
+
+                        Kembali
+
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-danger rounded-pill px-4">
+
+                        <i class="fa-solid fa-floppy-disk me-1"></i>
+
+                        Simpan
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts{
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+}

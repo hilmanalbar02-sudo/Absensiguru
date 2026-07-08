@@ -1,0 +1,149 @@
+@model IEnumerable<Absensiguru.Models.Guru>
+
+@{
+    ViewData["Title"] = "Data Guru";
+}
+
+
+<div class="container py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold text-danger">
+                Data Guru
+            </h2>
+
+            <p class="text-muted">
+                Daftar guru yang terdaftar dalam sistem absensi
+            </p>
+        </div>
+
+
+        <a asp-controller="Guru" asp-action="Create" class="btn btn-danger rounded-pill px-4">
+            + Tambah Guru
+        </a>
+
+    </div>
+
+
+
+    <div class="card shadow border-0 rounded-4">
+
+        <div class="card-body">
+
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+
+                    <thead class="table-danger">
+
+                        <tr>
+
+                            <th>No</th>
+                            <th>Nama Guru</th>
+                            <th>NIP</th>
+                            <th>Email</th>
+                            <th>No HP</th>
+                            <th>Status</th>
+
+                        </tr>
+
+                    </thead>
+
+
+
+                    <tbody>
+
+                        @if(Model != null && Model.Any())
+                        {
+
+                            int no = 1;
+
+                            foreach(var guru in Model)
+                            {
+
+                                <tr>
+
+                                    <td>
+                                        @no
+                                    </td>
+
+
+                                    <td class="fw-bold">
+                                        @guru.NamaGuru
+                                    </td>
+
+
+                                    <td>
+                                        @guru.Nip
+                                    </td>
+
+
+                                    <td>
+                                        @guru.Email
+                                    </td>
+
+
+                                    <td>
+                                        @guru.NoHp
+                                    </td>
+
+
+                                    <td>
+
+                                        @if(guru.Status == "Aktif")
+                                        {
+                                            <span class="badge bg-success">
+                                                Aktif
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">
+                                                Nonaktif
+                                            </span>
+                                        }
+
+
+                                </tr>
+
+
+                                no++;
+
+                            }
+
+                        }
+                        else
+                        {
+
+                            <tr>
+
+                                <td colspan="7" class="text-center text-muted py-4">
+
+                                    Belum ada data guru
+
+                                </td>
+
+                            </tr>
+
+                        }
+
+
+                    </tbody>
+
+
+                </table>
+
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+</div>

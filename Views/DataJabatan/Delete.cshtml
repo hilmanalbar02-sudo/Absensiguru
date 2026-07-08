@@ -1,0 +1,78 @@
+@model Absensiguru.Models.Jabatan
+
+@{
+    ViewData["Title"] = "Hapus Jabatan";
+}
+
+<div class="container py-4">
+
+    <div class="card shadow border-0 rounded-4">
+
+        <div class="card-header bg-danger text-white">
+
+            <h3 class="mb-0">
+
+                Hapus Jabatan
+
+            </h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="alert alert-danger">
+
+                Apakah Anda yakin ingin menghapus jabatan berikut?
+
+            </div>
+
+            <table class="table table-borderless">
+
+                <tr>
+
+                    <th width="200">
+
+                        Nama Jabatan
+
+                    </th>
+
+                    <td>
+
+                        @Model.NamaJabatan
+
+                    </td>
+
+                </tr>
+
+            </table>
+
+            <form asp-action="Delete">
+
+                <input type="hidden"
+                       asp-for="IdJabatan" />
+
+                <div class="d-flex justify-content-between">
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary rounded-pill">
+
+                        Batal
+
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-danger rounded-pill">
+
+                        Ya, Hapus
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

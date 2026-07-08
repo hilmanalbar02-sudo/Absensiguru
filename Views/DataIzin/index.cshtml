@@ -1,0 +1,97 @@
+@model IEnumerable<Absensiguru.Models.Izin>
+
+@{
+    Layout="_AdminLayout";
+    ViewData["Title"]="Data Izin";
+    int no=1;
+}
+
+<div class="card shadow rounded-4 border-0">
+
+    <div class="card-header bg-danger text-white">
+
+        <h3 class="mb-0">
+            Data Izin Guru
+        </h3>
+
+    </div>
+
+    <div class="card-body">
+
+        <table class="table table-bordered table-hover">
+
+            <thead class="table-danger">
+
+                <tr class="text-center">
+
+                    <th>No</th>
+                    <th>Guru</th>
+                    <th>Tanggal</th>
+                    <th>Jenis</th>
+                    <th>Alasan</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @foreach(var item in Model)
+                {
+                    <tr>
+
+                        <td>@(no++)</td>
+
+                        <td>@item.IdGuruNavigation.NamaGuru</td>
+
+                        <td>@item.Tanggal.ToString("dd/MM/yyyy")</td>
+
+                        <td>@item.JenisIzin</td>
+
+                        <td>@item.Alasan</td>
+
+                        <td>
+
+                            @if(item.Status=="Disetujui")
+                            {
+                                <span class="badge bg-success">Disetujui</span>
+                            }
+                            else if(item.Status=="Menunggu")
+                            {
+                                <span class="badge bg-warning text-dark">Menunggu</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Ditolak</span>
+                            }
+
+                        </td>
+
+                        <td class="text-center">
+
+                            <a asp-action="Details"
+                               asp-route-id="@item.IdIzin"
+                               class="btn btn-primary btn-sm">
+                                Detail
+                            </a>
+
+                            <a asp-action="Delete"
+                               asp-route-id="@item.IdIzin"
+                               class="btn btn-danger btn-sm">
+                                Hapus
+                            </a>
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>

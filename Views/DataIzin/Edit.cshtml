@@ -1,0 +1,91 @@
+@model Absensiguru.Models.Izin
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Edit Data Izin";
+}
+
+<div class="card shadow border-0 rounded-4">
+
+    <div class="card-header bg-warning">
+        <h3 class="mb-0 text-dark">Edit Data Izin</h3>
+    </div>
+
+    <div class="card-body">
+
+        <form asp-action="Edit" method="post">
+
+            <input type="hidden" asp-for="IdIzin" />
+
+            <div class="mb-3">
+                <label class="form-label">Guru</label>
+
+                <select asp-for="IdGuru"
+                        class="form-select"
+                        asp-items="ViewBag.IdGuru">
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Tanggal</label>
+
+                <input asp-for="Tanggal"
+                       type="date"
+                       class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Jenis Izin</label>
+
+                <select asp-for="JenisIzin"
+                        class="form-select">
+
+                    <option value="Izin">Izin</option>
+                    <option value="Sakit">Sakit</option>
+                    <option value="Cuti">Cuti</option>
+
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Alasan</label>
+
+                <textarea asp-for="Alasan"
+                          class="form-control"
+                          rows="3"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Bukti</label>
+
+                <input asp-for="Bukti"
+                       class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Status</label>
+
+                <select asp-for="Status"
+                        class="form-select">
+
+                    <option value="Menunggu">Menunggu</option>
+                    <option value="Disetujui">Disetujui</option>
+                    <option value="Ditolak">Ditolak</option>
+
+                </select>
+            </div>
+
+            <button class="btn btn-warning">
+                Update
+            </button>
+
+            <a asp-action="Index"
+               class="btn btn-secondary">
+                Kembali
+            </a>
+
+        </form>
+
+    </div>
+
+</div>

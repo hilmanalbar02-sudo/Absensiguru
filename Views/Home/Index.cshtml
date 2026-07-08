@@ -1,0 +1,205 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="dashboard-wrapper">
+
+    <div class="background-shape shape-one"></div>
+    <div class="background-shape shape-two"></div>
+
+
+    <div class="text-center dashboard-header">
+
+        <h1>
+            Sistem Absensi Guru
+        </h1>
+
+        <p>
+            Kelola kehadiran guru dengan mudah, cepat, dan terstruktur
+        </p>
+
+    </div>
+
+
+    <div class="row justify-content-center mt-5">
+
+        <div class="col-md-4 mb-4">
+
+            <div class="card dashboard-card">
+
+                <div class="icon">
+                    👨‍🏫
+                </div>
+
+                <h3>
+                    Data Guru
+                </h3>
+
+                <p>
+                    Mengelola informasi guru yang terdaftar
+                    dalam sistem.
+                </p>
+
+                <a asp-controller="Guru" asp-action="Index" class="btn btn-danger rounded-pill px-4">
+                    Kelola Guru
+                </a>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="col-md-4 mb-4">
+
+            <div class="card dashboard-card">
+
+                <div class="icon">
+                    📋
+                </div>
+
+                <h3>
+                    Absensi
+                </h3>
+
+                <p>
+                    Mencatat dan memantau kehadiran guru
+                    setiap hari.
+                </p>
+
+                <a href="/Absensi" class="btn btn-danger rounded-pill px-4">
+                    Input Absensi
+                </a>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<style>
+
+    .dashboard-wrapper {
+
+        position: relative;
+        overflow: hidden;
+        min-height: 500px;
+        padding: 50px 20px;
+
+    }
+
+
+    .dashboard-header {
+
+        position: relative;
+        z-index: 2;
+
+    }
+
+
+    .dashboard-header h1 {
+
+        font-size: 45px;
+        font-weight: 800;
+        color: #8B0000;
+        letter-spacing: 1px;
+
+    }
+
+
+    .dashboard-header p {
+
+        font-size: 18px;
+        color: #666;
+
+    }
+
+
+    .dashboard-card {
+
+        position: relative;
+        z-index: 2;
+
+        background: white;
+        border: none;
+        border-radius: 25px;
+
+        padding: 35px 25px;
+
+        text-align: center;
+
+        box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+
+        transition: 0.3s;
+
+    }
+
+
+    .dashboard-card:hover {
+
+        transform: translateY(-10px);
+
+    }
+
+
+    .dashboard-card h3 {
+
+        color: #b30000;
+        font-weight: bold;
+
+    }
+
+
+    .dashboard-card p {
+
+        color: #666;
+
+    }
+
+
+    .icon {
+
+        font-size: 55px;
+        margin-bottom: 15px;
+
+    }
+
+
+    .background-shape {
+
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0.08;
+
+    }
+
+
+    .shape-one {
+
+        width: 350px;
+        height: 350px;
+        background: red;
+
+        top: -120px;
+        left: -120px;
+
+    }
+
+
+    .shape-two {
+
+        width: 400px;
+        height: 400px;
+        background: darkred;
+
+        bottom: -180px;
+        right: -150px;
+
+    }
+
+
+</style>

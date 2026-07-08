@@ -1,0 +1,200 @@
+@model IEnumerable<Absensiguru.Models.Absensi>
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Data Absensi";
+
+    int no = 1;
+}
+
+<div class="card shadow border-0 rounded-4">
+
+    <div class="card-header bg-danger text-white">
+
+        <h3 class="mb-0 fw-bold">
+            Data Absensi Guru
+        </h3>
+
+    </div>
+
+    <div class="card-body">
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show">
+
+                @TempData["Success"]
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert">
+                </button>
+
+            </div>
+        }
+
+        <form method="get">
+
+            <div class="row mb-4">
+
+                <div class="col-md-10">
+
+                    <input type="text"
+                           name="searchString"
+                           value="@ViewBag.Search"
+                           class="form-control"
+                           placeholder="Cari nama guru atau status..." />
+
+                </div>
+
+                <div class="col-md-2">
+
+                    <button class="btn btn-danger w-100">
+                        <i class="bi bi-search"></i>
+                        Cari
+                    </button>
+
+                </div>
+
+            </div>
+
+        </form>
+
+        <div class="table-responsive">
+
+            <table class="table table-bordered table-hover align-middle">
+
+                <thead class="table-danger text-center">
+
+                    <tr>
+
+                        <th width="60">No</th>
+
+                        <th>Nama Guru</th>
+
+                        <th width="130">Tanggal</th>
+
+                        <th width="100">Masuk</th>
+
+                        <th width="100">Pulang</th>
+
+                        <th width="120">Status</th>
+
+                        <th>Keterangan</th>
+
+                        <th width="180">
+                            Aksi
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @if (Model.Any())
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+
+                                <td class="text-center">
+                                    @(no++)
+                                </td>
+
+                                <td>
+                                    @item.IdGuruNavigation.NamaGuru
+                                </td>
+
+                                <td class="text-center">
+                                    @item.Tanggal.ToString("dd/MM/yyyy")
+                                </td>
+
+                                <td class="text-center">
+                                    @(item.JamMasuk.HasValue ? item.JamMasuk.Value.ToString("HH\\:mm") : "-")
+                                </td>
+
+                                <td class="text-center">
+                                    @(item.JamPulang.HasValue ? item.JamPulang.Value.ToString("HH\\:mm") : "-")
+                                </td>
+
+                                <td class="text-center">
+
+                                    @switch (item.Status)
+                                    {
+                                        case "Hadir":
+                                            <span class="badge bg-success">Hadir</span>
+                                            break;
+
+                                        case "Izin":
+                                            <span class="badge bg-warning text-dark">Izin</span>
+                                            break;
+
+                                        case "Sakit":
+                                            <span class="badge bg-info">Sakit</span>
+                                            break;
+
+                                        default:
+                                            <span class="badge bg-danger">Alpha</span>
+                                            break;
+                                    }
+
+                                </td>
+
+                                <td>
+                                    @(string.IsNullOrEmpty(item.Keterangan) ? "-" : item.Keterangan)
+                                </td>
+
+                                <td class="text-center">
+
+                                    <a asp-action="Details"
+                                       asp-route-id="@item.IdAbsensi"
+                                       class="btn btn-primary btn-sm">
+
+                                        <i class="bi bi-eye-fill"></i>
+
+                                    </a>
+
+                                    <a asp-action="Edit"
+                                       asp-route-id="@item.IdAbsensi"
+                                       class="btn btn-warning btn-sm text-white">
+
+                                        <i class="bi bi-pencil-fill"></i>
+
+                                    </a>
+
+                                    <a asp-action="Delete"
+                                       asp-route-id="@item.IdAbsensi"
+                                       class="btn btn-danger btn-sm">
+
+                                        <i class="bi bi-trash-fill"></i>
+
+                                    </a>
+
+                                </td>
+
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+
+                            <td colspan="8" class="text-center text-muted py-4">
+
+                                Belum ada data absensi.
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>

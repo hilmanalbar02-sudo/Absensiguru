@@ -1,0 +1,61 @@
+@model Absensiguru.Models.Izin
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Hapus Data Izin";
+}
+
+<div class="card shadow border-0 rounded-4">
+
+    <div class="card-header bg-danger text-white">
+        <h3>Hapus Data Izin</h3>
+    </div>
+
+    <div class="card-body">
+
+        <div class="alert alert-danger">
+
+            Yakin ingin menghapus data izin dari
+
+            <strong>@Model.IdGuruNavigation.NamaGuru</strong> ?
+
+        </div>
+
+        <table class="table">
+
+            <tr>
+                <th>Jenis</th>
+                <td>@Model.JenisIzin</td>
+            </tr>
+
+            <tr>
+                <th>Tanggal</th>
+                <td>@Model.Tanggal.ToString("dd/MM/yyyy")</td>
+            </tr>
+
+            <tr>
+                <th>Status</th>
+                <td>@Model.Status</td>
+            </tr>
+
+        </table>
+
+        <form asp-action="Delete">
+
+            <input type="hidden"
+                   asp-for="IdIzin" />
+
+            <button class="btn btn-danger">
+                Hapus
+            </button>
+
+            <a asp-action="Index"
+               class="btn btn-secondary">
+                Batal
+            </a>
+
+        </form>
+
+    </div>
+
+</div>

@@ -1,0 +1,126 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Absensi Guru </title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #f8f9fa;
+        }
+
+        main {
+            flex: 1;
+        }
+
+        .navbar-custom {
+            background: linear-gradient(90deg, #8B0000, #ff0000);
+            box-shadow: 0 3px 10px rgba(0,0,0,.2);
+        }
+
+        .navbar-brand {
+            color: white !important;
+            font-size: 23px;
+            font-weight: bold;
+        }
+
+        .nav-link {
+            color: white !important;
+            font-weight: 600;
+            margin-left: 15px;
+        }
+
+        .nav-link:hover {
+            color: #ffe0e0 !important;
+        }
+
+        footer {
+            background: #8B0000;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<header>
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+
+            <a class="navbar-brand" href="/">
+                SDN EMO KURNIAATMAJA
+            </a>
+
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#menu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+
+            <div class="collapse navbar-collapse" id="menu">
+
+                <ul class="navbar-nav ms-auto">
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">
+                            Dashboard
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Guru">
+                            Data Guru
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Absensi">
+                            Absensi
+                        </a>
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+    </nav>
+</header>
+
+
+<main class="container mt-4">
+
+    @RenderBody()
+
+</main>
+
+
+<footer>
+
+    <div class="container">
+        © 2026 Sistem Absensi Guru
+    </div>
+
+</footer>
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+
+@await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

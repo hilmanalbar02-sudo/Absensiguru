@@ -1,0 +1,185 @@
+@model IEnumerable<Absensiguru.Models.Absensi>
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Laporan Absensi";
+
+    int no = 1;
+}
+
+<div class="card shadow border-0 rounded-4">
+
+    <div class="card-header bg-danger text-white">
+        <h3 class="mb-0 fw-bold">
+            Laporan Absensi Guru
+        </h3>
+    </div>
+
+    <div class="card-body">
+
+        <form method="get">
+
+            <div class="row g-3">
+
+                <div class="col-md-3">
+
+                    <label class="form-label fw-semibold">
+                        Tanggal Awal
+                    </label>
+
+                    <input type="date"
+                           name="mulai"
+                           value="@ViewBag.Mulai"
+                           class="form-control" />
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <label class="form-label fw-semibold">
+                        Tanggal Akhir
+                    </label>
+
+                    <input type="date"
+                           name="selesai"
+                           value="@ViewBag.Selesai"
+                           class="form-control" />
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <label class="form-label fw-semibold">
+                        Status
+                    </label>
+
+                    <select name="status" class="form-select">
+
+                        <option value="">Semua</option>
+                        <option value="Hadir">Hadir</option>
+                        <option value="Izin">Izin</option>
+                        <option value="Sakit">Sakit</option>
+                        <option value="Alpha">Alpha</option>
+
+                    </select>
+
+                </div>
+
+                <div class="col-md-3 d-flex align-items-end">
+
+                    <button class="btn btn-danger w-100">
+
+                        <i class="bi bi-search"></i>
+
+                        Tampilkan
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </form>
+
+        <hr />
+
+        <div class="mb-3">
+
+            <a asp-action="ExportPdf"
+               class="btn btn-danger">
+
+                <i class="bi bi-file-earmark-pdf"></i>
+
+                Download PDF
+
+            </a>
+
+            <a asp-action="ExportExcel"
+               class="btn btn-success ms-2">
+
+                <i class="bi bi-file-earmark-excel"></i>
+
+                Export Excel
+
+            </a>
+
+        </div>
+
+        <div class="table-responsive">
+
+            <table class="table table-bordered table-hover align-middle">
+
+                <thead class="table-danger text-center">
+
+                    <tr>
+
+                        <th width="60">No</th>
+                        <th>Nama Guru</th>
+                        <th width="150">Tanggal</th>
+                        <th width="120">Jam Masuk</th>
+                        <th width="120">Jam Pulang</th>
+                        <th width="120">Status</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td class="text-center">
+                                @(no++)
+                            </td>
+
+                            <td>
+                                @item.IdGuruNavigation.NamaGuru
+                            </td>
+
+                            <td class="text-center">
+                                @item.Tanggal.ToString("dd/MM/yyyy")
+                            </td>
+
+                            <td class="text-center">
+                                @(item.JamMasuk.HasValue ? item.JamMasuk.Value.ToString(@"HH\:mm") : "-")
+                            </td>
+
+                            <td class="text-center">
+                                @(item.JamPulang.HasValue ? item.JamPulang.Value.ToString(@"HH\:mm") : "-")
+                            </td>
+
+                            <td class="text-center">
+
+                                @if (item.Status == "Hadir")
+                                {
+                                    <span class="badge bg-success">Hadir</span>
+                                }
+                                else if (item.Status == "Izin")
+                                {
+                                    <span class="badge bg-warning text-dark">Izin</span>
+                                }
+                                else if (item.Status == "Sakit")
+                                {
+                                    <span class="badge bg-info">Sakit</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Alpha</span>
+                                }
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>

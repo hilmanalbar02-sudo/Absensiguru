@@ -1,0 +1,58 @@
+@model Absensiguru.Models.Jabatan
+
+@{
+    ViewData["Title"] = "Detail Jabatan";
+}
+
+<div class="container py-4">
+
+    <div class="card shadow border-0 rounded-4">
+
+        <div class="card-header bg-primary text-white">
+
+            <h3 class="mb-0">
+
+                Detail Jabatan
+
+            </h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <table class="table table-borderless">
+
+                <tr>
+
+                    <th width="200">
+
+                        Nama Jabatan
+
+                    </th>
+
+                    <td>
+
+                        @Model.NamaJabatan
+
+                    </td>
+
+                </tr>
+
+            </table>
+
+        </div>
+
+        <div class="card-footer text-end">
+
+            <a asp-action="Index"
+               class="btn btn-secondary rounded-pill">
+
+                Kembali
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>

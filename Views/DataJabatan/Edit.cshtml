@@ -1,0 +1,83 @@
+@model Absensiguru.Models.Jabatan
+
+@{
+    ViewData["Title"] = "Edit Jabatan";
+}
+
+<div class="container py-4">
+
+    <div class="card shadow border-0 rounded-4">
+
+        <div class="card-header bg-warning">
+
+            <h3 class="fw-bold mb-0">
+
+                Edit Data Jabatan
+
+            </h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Edit">
+
+                <input type="hidden"
+                       asp-for="IdJabatan" />
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger">
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="NamaJabatan"
+                           class="form-label fw-bold">
+
+                        Nama Jabatan
+
+                    </label>
+
+                    <input asp-for="NamaJabatan"
+                           class="form-control" />
+
+                    <span asp-validation-for="NamaJabatan"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+                <hr />
+
+                <div class="d-flex justify-content-between">
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary rounded-pill">
+
+                        Kembali
+
+                    </a>
+
+                    <button class="btn btn-warning rounded-pill">
+
+                        Update
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts{
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+}

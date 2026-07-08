@@ -1,0 +1,344 @@
+@using Microsoft.AspNetCore.Http
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Dashboard Admin";
+
+    var nama = Context.Session.GetString("NamaGuru");
+
+    if (string.IsNullOrEmpty(nama))
+    {
+        nama = Context.Session.GetString("Username");
+    }
+}
+
+<style>
+
+    .stat-card{
+        transition:.3s;
+        border:none;
+        border-radius:18px;
+    }
+
+    .stat-card:hover{
+        transform:translateY(-6px);
+        box-shadow:0 .7rem 1.5rem rgba(0,0,0,.15)!important;
+    }
+
+    .menu-card{
+        transition:.3s;
+        border-radius:18px;
+    }
+
+    .menu-card:hover{
+        background:#dc3545;
+        color:#fff!important;
+        transform:translateY(-5px);
+    }
+
+    .menu-card:hover i,
+    .menu-card:hover strong{
+        color:#fff!important;
+    }
+
+    .menu-icon{
+        font-size:50px;
+        color:#dc3545;
+    }
+
+</style>
+
+<div class="container-fluid">
+
+    <!-- HEADER -->
+
+    <div class="card shadow border-0 rounded-4 mb-4">
+
+        <div class="card-body py-4">
+
+            <div class="row align-items-center">
+
+                <div class="col-md-8">
+
+                    <h2 class="fw-bold text-danger mb-2">
+                        Selamat Datang, @nama 👋
+                    </h2>
+
+                    <p class="text-muted mb-1">
+                        Selamat bekerja dan semoga aktivitas hari ini berjalan lancar.
+                    </p>
+
+                    <small class="text-secondary">
+                        Sistem Informasi Absensi Guru
+                    </small>
+
+                </div>
+
+                <div class="col-md-4 text-end">
+
+                    <h5 class="fw-bold text-danger">
+                        @DateTime.Now.ToString("dddd")
+                    </h5>
+
+                    <div class="text-muted mb-2">
+                        @DateTime.Now.ToString("dd MMMM yyyy")
+                    </div>
+
+                    <span class="badge bg-success px-3 py-2">
+                        Online
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- STATISTIK -->
+
+    <div class="row g-4 mb-5">
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card shadow stat-card">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <small class="text-muted">
+                                Total Guru
+                            </small>
+
+                            <h2 class=""fw-bold text-success">
+                                12
+                            </h2>
+
+                        </div>
+
+                        <i class="bi bi-people-fill text-danger"
+                           style="font-size:55px;"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card shadow stat-card">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <small class="text-muted">
+                                Hadir Hari Ini
+                            </small>
+
+                            <h2 class="fw-bold text-success mt-2
+                            @ViewBag.Hadir">
+                                0
+                            </h2>
+
+                        </div>
+
+                        <i class="bi bi-check-circle-fill text-success"
+                           style="font-size:55px;"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card shadow stat-card">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <small class="text-muted">
+                                Izin / Sakit
+                            </small>
+
+                            <h2 class="fw-bold text-warning mt-2
+                            @ViewBag.Izin">
+                                0
+                            </h2>
+
+                        </div>
+
+                        <i class="bi bi-file-earmark-medical-fill text-warning"
+                           style="font-size:55px;"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card shadow stat-card">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <small class="text-muted">
+                                Alpha
+                            </small>
+
+                            <h2 class="fw-bold text-danger mt-2
+                            @ViewBag.Alpha">
+                                0
+                            </h2>
+
+                        </div>
+
+                        <i class="bi bi-x-circle-fill text-danger"
+                           style="font-size:55px;"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- MENU -->
+
+    <div class="card shadow border-0 rounded-4">
+
+        <div class="card-header bg-danger text-white">
+
+            <h4 class="mb-0">
+                Menu Administrator
+            </h4>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="row g-4">
+
+                <div class="col-lg-4 col-md-6">
+
+                    <a asp-controller="DataGuru"
+                       asp-action="Index"
+                       class="btn btn-outline-danger w-100 py-4 menu-card">
+
+                        <i class="bi bi-people-fill menu-icon"></i>
+
+                        <br /><br />
+
+                        <strong>Data Guru</strong>
+
+                    </a>
+
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+
+                    <a asp-controller="DataUser"
+                       asp-action="Index"
+                       class="btn btn-outline-danger w-100 py-4 menu-card">
+
+                        <i class="bi bi-person-fill-gear menu-icon"></i>
+
+                        <br /><br />
+
+                        <strong>Data User</strong>
+
+                    </a>
+
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+
+                    <a asp-controller="DataAbsensi"
+                       asp-action="Index"
+                       class="btn btn-outline-danger w-100 py-4 menu-card">
+
+                        <i class="bi bi-calendar-check-fill menu-icon"></i>
+
+                        <br /><br />
+
+                        <strong>Data Absensi</strong>
+
+                    </a>
+
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+
+                    <a asp-controller="DataIzin"
+                       asp-action="Index"
+                       class="btn btn-outline-danger w-100 py-4 menu-card">
+
+                        <i class="bi bi-file-earmark-medical-fill menu-icon"></i>
+
+                        <br /><br />
+
+                        <strong>Data Izin</strong>
+
+                    </a>
+
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+
+                    <a asp-controller="Laporan"
+                       asp-action="Index"
+                       class="btn btn-outline-danger w-100 py-4 menu-card">
+
+                        <i class="bi bi-bar-chart-fill menu-icon"></i>
+
+                        <br /><br />
+
+                        <strong>Laporan</strong>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+        </div>
+
+    </div>
+
+</div>
