@@ -110,7 +110,6 @@ C:\Users\USER\Absensiguru\obj\Debug\net9.0\rjsmcshtml.dswa.cache.json
 C:\Users\USER\Absensiguru\obj\Debug\net9.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 C:\Users\USER\Absensiguru\obj\Debug\net9.0\scopedcss\bundle\Absensiguru.styles.css
 C:\Users\USER\Absensiguru\obj\Debug\net9.0\scopedcss\projectbundle\Absensiguru.bundle.scp.css
-C:\Users\USER\Absensiguru\obj\Debug\net9.0\compressed\8rbbixc4hj-{0}-b9sayid5wm-b9sayid5wm.gz
 C:\Users\USER\Absensiguru\obj\Debug\net9.0\compressed\enbhe8fp7b-{0}-61n19gt1b8-61n19gt1b8.gz
 C:\Users\USER\Absensiguru\obj\Debug\net9.0\compressed\f9rp3r3uem-{0}-xtxxf3hu2r-xtxxf3hu2r.gz
 C:\Users\USER\Absensiguru\obj\Debug\net9.0\compressed\zmrakkc48q-{0}-bqjiyaj88i-bqjiyaj88i.gz
@@ -229,3 +228,5 @@ C:\Users\USER\Absensiguru\bin\Debug\net9.0\runtimes\win-x64\native\QuestPdfSkia.
 C:\Users\USER\Absensiguru\bin\Debug\net9.0\runtimes\win-x64\native\qpdf.dll
 C:\Users\USER\Absensiguru\bin\Debug\net9.0\runtimes\win-x86\native\QuestPdfSkia.dll
 C:\Users\USER\Absensiguru\bin\Debug\net9.0\runtimes\win-x86\native\qpdf.dll
+C:\Users\USER\Absensiguru\obj\Debug\net9.0\Absensiguru.sourcelink.json
+C:\Users\USER\Absensiguru\obj\Debug\net9.0\compressed\8rbbixc4hj-{0}-codxmpo7np-codxmpo7np.gz

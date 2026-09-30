@@ -1,0 +1,313 @@
+@using Microsoft.AspNetCore.Http
+
+@{
+    var nama = Context.Session.GetString("NamaGuru");
+    var jabatan = Context.Session.GetString("Jabatan");
+    var foto = Context.Session.GetString("Foto");
+}
+
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>@ViewData["Title"] - Sistem Absensi Guru</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+
+    <style>
+        body {
+            margin: 0;
+            background: #edf2f7;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        /* ===========================================
+           SIDEBAR (Sama Seperti Admin)
+        =========================================== */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 340px;
+            height: 100vh;
+            background: linear-gradient( 180deg, #c40000 0%, #df0d0d 45%, #ff2b2b 100% );
+            border-top-right-radius: 35px;
+            border-bottom-right-radius: 35px;
+            overflow-y: auto;
+            box-shadow: 10px 0 30px rgba(0,0,0,.15);
+            padding-bottom: 30px;
+            z-index: 999;
+        }
+
+        /* Scrollbar Style */
+        .sidebar::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,.35);
+            border-radius: 20px;
+        }
+
+        /* =============================
+           LOGO / HEADER SIDEBAR
+        ============================= */
+        .sidebar-header {
+            text-align: center;
+            padding: 45px 25px 35px;
+        }
+
+        .sidebar-header img {
+            width: 95px;
+            margin-bottom: 18px;
+            object-fit: contain;
+        }
+
+        .sidebar-header h3 {
+            color: white;
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-header p {
+            color: white;
+            font-size: 17px;
+            opacity: .95;
+            margin: 0;
+        }
+
+        .sidebar-header .badge {
+            margin-top: 18px;
+            background: white;
+            color: #d60000;
+            font-size: 15px;
+            padding: 8px 20px;
+            border-radius: 30px;
+        }
+
+        /* Garis Pembatas */
+        .sidebar hr {
+            border-color: rgba(255,255,255,.25);
+            margin: 0 22px 25px;
+            opacity: 1;
+        }
+
+        /* =============================
+           MENU & FOOTER NAV LINK
+        ============================= */
+        .sidebar-menu, .sidebar-footer {
+            padding: 0 18px;
+        }
+
+        .sidebar-menu .nav-link, .sidebar-footer .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            color: white;
+            text-decoration: none;
+            padding: 18px 24px;
+            margin-bottom: 12px;
+            border-radius: 22px;
+            font-size: 18px;
+            font-weight: 600;
+            transition: .30s;
+        }
+
+        .sidebar-menu .nav-link i, .sidebar-footer .nav-link i {
+            font-size: 28px;
+            width: 34px;
+            text-align: center;
+        }
+
+        .sidebar-menu .nav-link:hover, .sidebar-footer .nav-link:hover {
+            background: rgba(255,255,255,.13);
+            color: white;
+            transform: translateX(8px);
+        }
+
+        /* MENU AKTIF */
+        .sidebar-menu .nav-link.active, .sidebar-footer .nav-link.active {
+            background: white;
+            color: #e00000;
+            box-shadow: 0 12px 25px rgba(0,0,0,.15);
+        }
+
+        /* =============================
+           CONTENT AREA ADJUSTMENT
+        ============================= */
+        .content {
+            margin-left: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Jarak aman disesuaikan ke 370px (Lebar sidebar 340px + 30px gap) */
+        .topbar {
+            margin: 20px;
+            margin-left: 370px; 
+            background: #fff;
+            border-radius: 25px;
+            padding: 25px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,.06);
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+        }
+
+        .main-content {
+            padding: 15px 40px 40px 40px;
+            margin-left: 340px; 
+            flex: 1;
+        }
+
+        hr {
+            opacity: .15;
+        }
+
+        /* =============================
+           INTEGRASI CSS BARU (LANGKAH 4)
+        ============================= */
+        .top-user {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-photo {
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #fff;
+            box-shadow: 0 5px 15px rgba(0,0,0,.18);
+        }
+
+        .top-user h5 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .top-user span {
+            color: #777;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+        <!-- HEADER LOGO -->
+        <div class="sidebar-header">
+            <img src="~/images/logo.png" alt="Logo">
+            <h3>ABSENSI GURU</h3>
+            <p>Portal Guru</p>
+            <span class="badge">Guru</span>
+        </div>
+
+        <hr>
+
+        <!-- UTAMA MENU -->
+        <div class="sidebar-menu">
+            <a asp-controller="Guru" asp-action="Dashboard" class="nav-link @(ViewData["Title"]?.ToString() == "Dashboard" ? "active" : "")">
+                <i class="bi bi-speedometer2"></i>
+                Dashboard
+            </a>
+
+            <a asp-controller="Guru" asp-action="Riwayat" class="nav-link @(ViewData["Title"]?.ToString() == "Riwayat Absensi" ? "active" : "")">
+                <i class="bi bi-calendar-check-fill"></i>
+                Riwayat Absensi
+            </a>
+
+            <a asp-controller="Guru" asp-action="PengajuanIzin" class="nav-link @(ViewData["Title"]?.ToString() == "Pengajuan Izin" ? "active" : "")">
+                <i class="bi bi-file-earmark-medical-fill"></i>
+                Pengajuan Izin
+            </a>
+
+            <a asp-controller="Guru" asp-action="RiwayatIzin" class="nav-link @(ViewData["Title"]?.ToString() == "Riwayat Izin" ? "active" : "")">
+                <i class="bi bi-clock-history"></i>
+                Riwayat Izin
+            </a>
+        </div>
+
+        <hr>
+
+        <!-- FOOTER MENU -->
+        <div class="sidebar-footer">
+            <a asp-controller="Guru" asp-action="Profil" class="nav-link @(ViewData["Title"]?.ToString() == "Profil Saya" ? "active" : "")">
+                <i class="bi bi-person-circle"></i>
+                Profil Saya
+            </a>
+
+            <a asp-controller="Guru" asp-action="UbahPassword" class="nav-link @(ViewData["Title"]?.ToString() == "Ubah Password" ? "active" : "")">
+                <i class="bi bi-key-fill"></i>
+                Ubah Password
+            </a>
+
+            <a asp-controller="Login" asp-action="Logout" class="nav-link">
+                <i class="bi bi-box-arrow-right"></i>
+                Logout
+            </a>
+        </div>
+
+    </div>
+
+    <!-- MAIN CONTENT AREA -->
+    <div class="content">
+        
+        <!-- TOPBAR -->
+        <div class="topbar">
+            <div>
+                <h4 class="mb-0 text-danger fw-bold">
+                    @ViewData["Title"]
+                </h4>
+            </div>
+
+            <!-- INTEGRASI TOP-USER BARU (LANGKAH 3) -->
+            <div class="top-user">
+                @if (!string.IsNullOrEmpty(foto))
+                {
+                    <img src="~/uploads/guru/@foto" class="user-photo" />
+                }
+                else
+                {
+                    <img src="~/images/default-user.png" class="user-photo" />
+                }
+
+                <div>
+                    <h5>@nama</h5>
+                    <span>@jabatan</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- BODY CONTENT -->
+        <div class="main-content">
+            @RenderBody()
+
+            <hr class="mt-5" />
+            <div class="text-center text-muted py-3" style="font-size: 13px;">
+                © 2026 Sistem Absensi Guru
+                <br />
+                <span class="fw-semibold">SDN Emo Kurniaatmaja</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

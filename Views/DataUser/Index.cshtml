@@ -4,179 +4,187 @@
     ViewData["Title"] = "Data User";
 }
 
-<div class="container py-4">
+<style>
+    .table-modern tbody tr {
+        transition: all 0.2s ease-in-out;
+    }
+    .table-modern tbody tr:hover {
+        background-color: #f8f9fa !important;
+        transform: scale(1.002);
+    }
+    .btn-action {
+        width: 34px;
+        height: 34px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        margin: 0 2px;
+    }
+</style>
+
+<div class="container-fluid py-2">
 
     @if (TempData["Success"] != null)
     {
-        <div class="alert alert-success alert-dismissible fade show">
-
+        <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm mb-3" style="border-radius: 12px;">
+            <i class="bi bi-check-circle-fill me-2"></i>
             @TempData["Success"]
-
-            <button type="button"
-                    class="btn-close"
-                    data-bs-dismiss="alert">
-            </button>
-
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     }
 
-    <div class="card shadow border-0 rounded-4">
-
-        <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center">
-
-            <h3 class="fw-bold mb-0">
-                Data User
-            </h3>
-
-            <a asp-action="Create"
-               class="btn btn-light rounded-pill">
-
-                <i class="fa-solid fa-plus"></i>
-
+    <div class="card page-card border-0 shadow-sm">
+        
+        <!-- HEADER UTAMA -->
+        <div class="page-header d-flex justify-content-between align-items-center bg-light">
+            <div>
+                <h3 class="mb-0">
+                    <i class="bi bi-person-badge-fill me-2 text-danger"></i>
+                    Data User
+                </h3>
+                <p class="mb-0 text-muted small">
+                    Kelola seluruh akun pengguna sistem absensi guru SDN Emo Kurniaatmaja.
+                </p>
+            </div>
+            <a asp-action="Create" class="btn btn-danger px-4" style="border-radius: 12px; height: 42px; display: inline-flex; align-items: center; justify-content: center; font-weight: 500;">
+                <i class="bi bi-plus-circle-fill me-2"></i>
                 Tambah User
-
             </a>
-
         </div>
 
-        <div class="card-body">
-
-            <form method="get">
-
-                <div class="row mb-3">
-
+        <div class="card-body p-4">
+            
+            <!-- FORM PENCARIAN & FILTER -->
+            <form method="get" class="mb-4">
+                <div class="row g-3">
                     <div class="col-md-5">
-
-                        <input type="text"
-                               name="searchString"
-                               value="@ViewBag.Search"
-                               class="form-control"
-                               placeholder="Cari username atau nama guru..." />
-
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0 text-muted">
+                                <i class="bi bi-search"></i>
+                            </span>
+                            <input type="text" 
+                                   name="searchString" 
+                                   value="@ViewBag.Search" 
+                                   class="form-control border-start-0 ps-0" 
+                                   placeholder="Cari username atau nama guru..." style="height: 42px; border-radius: 0 10px 10px 0;" />
+                        </div>
                     </div>
-
+                    <div class="col-md-3">
+                        <select name="roleFilter" id="roleFilter" class="form-select" style="height: 42px; border-radius: 10px;">
+                            <option value="">Semua Peran / Role</option>
+                            <option value="Admin">Administrator</option>
+                            <option value="TU">Tata Usaha</option>
+                            <option value="Guru">Guru</option>
+                        </select>
+                    </div>
                     <div class="col-md-2">
-
-                        <button class="btn btn-danger w-100">
-
-                            Cari
-
+                        <button type="submit" class="btn btn-secondary w-100" style="height: 42px; border-radius: 10px; font-weight: 500;">
+                            Filter Data
                         </button>
-
                     </div>
-
                 </div>
-
             </form>
 
+            <!-- TABEL DATA -->
             <div class="table-responsive">
-
-                <table class="table table-hover table-bordered align-middle">
-
-                    <thead class="table-danger">
-
-                        <tr class="text-center">
-
-                            <th>No</th>
-                            <th>Username</th>
-                            <th>Nama Guru</th>
-                            <th>Role</th>
-                            <th width="180">Aksi</th>
-
+                <table class="table table-modern align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th width="60" class="text-center text-muted fw-semibold">No</th>
+                            <th class="text-muted fw-semibold">Username</th>
+                            <th class="text-muted fw-semibold">Nama Lengkap Guru</th>
+                            <th width="150" class="text-center text-muted fw-semibold">Peran</th>
+                            <th width="120" class="text-center text-muted fw-semibold">Status</th>
+                            <th width="160" class="text-center text-muted fw-semibold">Aksi</th>
                         </tr>
-
                     </thead>
-
                     <tbody>
-
-                        @{
-                            int no = 1;
-                        }
-
-                        @foreach (var item in Model)
+                        @if (!Model.Any())
                         {
                             <tr>
-
-                                <td class="text-center">
-                                    @no
+                                <td colspan="6" class="text-center text-muted py-4">
+                                    <i class="bi bi-folder-x-display d-block fs-2 mb-2"></i>
+                                    Tidak ada data pengguna ditemukan.
                                 </td>
-
-                                <td>
-                                    @item.Username
-                                </td>
-
-                                <td>
-
-                                    @(item.IdGuruNavigation != null
-                                        ? item.IdGuruNavigation.NamaGuru
-                                        : "-")
-
-                                </td>
-
-                                <td class="text-center">
-
-                                    @if (item.Role == "Admin")
-                                    {
-                                        <span class="badge bg-danger">
-                                            Admin
-                                        </span>
-                                    }
-                                    else if (item.Role == "Guru")
-                                    {
-                                        <span class="badge bg-primary">
-                                            Guru
-                                        </span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-success">
-                                            TU
-                                        </span>
-                                    }
-
-                                </td>
-
-                                <td class="text-center">
-
-                                    <a asp-action="Details"
-                                       asp-route-id="@item.IdUser"
-                                       class="btn btn-primary btn-sm">
-
-                                        <i class="fa-solid fa-eye"></i>
-
-                                    </a>
-
-                                    <a asp-action="Edit"
-                                       asp-route-id="@item.IdUser"
-                                       class="btn btn-warning btn-sm">
-
-                                        <i class="fa-solid fa-pen"></i>
-
-                                    </a>
-
-                                    <a asp-action="Delete"
-                                       asp-route-id="@item.IdUser"
-                                       class="btn btn-danger btn-sm">
-
-                                        <i class="fa-solid fa-trash"></i>
-
-                                    </a>
-
-                                </td>
-
                             </tr>
-
-                            no++;
                         }
-
+                        else
+                        {
+                            int no = 1;
+                            foreach (var item in Model)
+                            {
+                                <tr class="user-row" data-role="@item.Role">
+                                    <td class="text-center fw-bold text-secondary">@no</td>
+                                    <td class="fw-medium text-dark">@item.Username</td>
+                                    <td class="text-secondary">
+                                        @(item.IdGuruNavigation != null ? item.IdGuruNavigation.NamaGuru : "-")
+                                    </td>
+                                    <td class="text-center">
+                                        @if (item.Role == "Admin")
+                                        {
+                                            <span class="badge bg-danger-subtle text-danger px-3 py-1 border border-danger-subtle rounded-pill">
+                                                Administrator
+                                            </span>
+                                        }
+                                        else if (item.Role == "TU")
+                                        {
+                                            <span class="badge bg-primary-subtle text-primary px-3 py-1 border border-primary-subtle rounded-pill">
+                                                Tata Usaha
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-success-subtle text-success px-3 py-1 border border-success-subtle rounded-pill">
+                                                Guru
+                                            </span>
+                                        }
+                                    </td>
+                                    <td class="text-center">
+                                        <!-- Placeholder Status Akun Aktif -->
+                                        <span class="badge bg-success px-2 py-1 small rounded d-inline-flex align-items-center">
+                                            <span class="spinner-grow spinner-grow-sm me-1" style="width: 6px; height: 6px; animation-duration: 1.5s;"></span>
+                                            Aktif
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <a asp-action="Details" asp-route-id="@item.IdUser" class="btn btn-info btn-action text-white" title="Detail Pengenang">
+                                            <i class="bi bi-eye-fill"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@item.IdUser" class="btn btn-warning btn-action text-dark" title="Ubah Akun">
+                                            <i class="bi bi-pencil-fill"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@item.IdUser" class="btn btn-danger btn-action" title="Hapus Akun">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                no++;
+                            }
+                        }
                     </tbody>
-
                 </table>
-
             </div>
 
         </div>
-
     </div>
-
 </div>
+
+@section Scripts {
+    <script>
+        // Fitur Filter Client-Side Sederhana untuk Dropdown Peran (Role)
+        document.getElementById('roleFilter').addEventListener('change', function() {
+            var selectedRole = this.value;
+            var rows = document.querySelectorAll('.user-row');
+            
+            rows.forEach(function(row) {
+                var rowRole = row.getAttribute('data-role');
+                if (selectedRole === "" || rowRole === selectedRole) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        });
+    </script>
+}

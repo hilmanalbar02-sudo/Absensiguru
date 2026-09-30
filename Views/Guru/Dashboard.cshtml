@@ -1,0 +1,572 @@
+@model Absensiguru.Models.Guru
+
+@{
+    ViewData["Title"] = "Dashboard Guru | SIMAGU";
+    var absensi = ViewBag.AbsensiHariIni as Absensiguru.Models.Absensi;
+}
+
+<div class="container-fluid">
+
+    @if (TempData["Sukses"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show shadow-sm">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            @TempData["Sukses"]
+            <button class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show shadow-sm">
+            <i class="bi bi-exclamation-circle-fill me-2"></i>
+            @TempData["Error"]
+            <button class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <!-- ================= HEADER ================= -->
+    <div class="dashboard-header">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <div class="d-flex align-items-center">
+                    <div class="profile-photo">
+                        @if (!string.IsNullOrEmpty(Model.Foto))
+                        {
+                            <img src="~/uploads/guru/@Model.Foto" alt="Foto Guru" />
+                        }
+                        else
+                        {
+                            <img src="~/images/default-user.png" alt="Foto Guru" />
+                        }
+                    </div>
+                    <div class="ms-4">
+                        <div class="welcome-text">Selamat Datang di SIMAGU</div>
+                        <div class="guru-name">@Model.NamaGuru</div>
+                        <div class="guru-jabatan">
+                            <i class="bi bi-award-fill"></i> @Model.IdJabatanNavigation.NamaJabatan
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="time-box">
+                    <div class="today">
+                        <i class="bi bi-calendar3 me-2"></i>
+                        @DateTime.Now.ToString("dddd, dd MMMM yyyy")
+                    </div>
+                    <div id="clock"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 4 MINI CARDS ================= -->
+    <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="mini-card bg-success">
+                <i class="bi bi-box-arrow-in-right"></i>
+                <div>
+                    <small>Jam Masuk</small>
+                    <h4>@(absensi?.JamMasuk?.ToString() ?? "--:--")</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="mini-card bg-primary">
+                <i class="bi bi-box-arrow-right"></i>
+                <div>
+                    <small>Jam Pulang</small>
+                    <h4>@(absensi?.JamPulang?.ToString() ?? "--:--")</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="mini-card bg-warning">
+                <i class="bi bi-award-fill"></i>
+                <div>
+                    <small>Status</small>
+                    <h5 class="m-0 fw-bold text-white">@(absensi == null ? "Belum Absen" : absensi.Status)</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="mini-card bg-danger">
+                <i class="bi bi-calendar-check"></i>
+                <div>
+                    <small>Kehadiran</small>
+                    <h4>100%</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= PROGRESS KEHADIRAN ================= -->
+    <div class="card dashboard-card mb-4">
+        <div class="card-body">
+            <h5 class="fw-bold m-0">
+                <i class="bi bi-bar-chart-fill text-danger me-2"></i>
+                Kehadiran Bulan Ini
+            </h5>
+            <div class="progress mt-4" style="height:28px; border-radius: 10px;">
+                <div class="progress-bar bg-danger" style="width:85%; font-weight: bold; line-height: 28px;">
+                    85%
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= QUICK MENU ================= -->
+    <div class="row mb-4">
+        <div class="col-md-3 col-6 mb-3">
+            <a asp-action="Profil" class="btn btn-light shadow-sm rounded-4 w-100 py-4 quick-menu-btn">
+                <i class="bi bi-person-circle fs-2 text-danger"></i>
+                <br>
+                <span class="fw-bold mt-2 d-inline-block">Profil Saya</span>
+            </a>
+        </div>
+        <div class="col-md-3 col-6 mb-3">
+            <a asp-action="Riwayat" class="btn btn-light shadow-sm rounded-4 w-100 py-4 quick-menu-btn">
+                <i class="bi bi-clock-history fs-2 text-primary"></i>
+                <br>
+                <span class="fw-bold mt-2 d-inline-block">Riwayat</span>
+            </a>
+        </div>
+        <div class="col-md-3 col-6 mb-3">
+            <a asp-action="PengajuanIzin" class="btn btn-light shadow-sm rounded-4 w-100 py-4 quick-menu-btn">
+                <i class="bi bi-file-earmark-medical fs-2 text-success"></i>
+                <br>
+                <span class="fw-bold mt-2 d-inline-block">Ajukan Izin</span>
+            </a>
+        </div>
+        <div class="col-md-3 col-6 mb-3">
+            <a asp-action="UbahPassword" class="btn btn-light shadow-sm rounded-4 w-100 py-4 quick-menu-btn">
+                <i class="bi bi-key-fill fs-2 text-warning"></i>
+                <br>
+                <span class="fw-bold mt-2 d-inline-block">Password</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- ================= MAIN CONTENT CARDS ================= -->
+    <div class="row">
+        <!-- STATUS ABSENSI -->
+        <div class="col-lg-4 mb-4">
+            <div class="card dashboard-card h-100">
+                <div class="card-body text-center">
+                    <div class="status-icon mb-3">
+                        <i class="bi bi-calendar-check-fill"></i>
+                    </div>
+                    <h4 class="card-title-custom">Status Absensi Hari Ini</h4>
+                    <hr />
+                    @if (absensi == null)
+                    {
+                        <span class="badge bg-warning text-dark fs-6 px-4 py-3 rounded-pill">BELUM ABSEN</span>
+                        <p class="text-muted mt-4 mb-0">Anda belum melakukan absensi hari ini.</p>
+                    }
+                    else if (absensi.JamPulang == null)
+                    {
+                        <span class="badge bg-success fs-6 px-4 py-3 rounded-pill">SUDAH ABSEN MASUK</span>
+                        <div class="mt-4">
+                            <div class="info-title">Jam Masuk</div>
+                            <div class="display-5 fw-bold text-success">@absensi.JamMasuk</div>
+                        </div>
+                    }
+                    else
+                    {
+                        <span class="badge bg-primary fs-6 px-4 py-3 rounded-pill">ABSENSI SELESAI</span>
+                        <div class="mt-4">
+                            <div class="info-title">Jam Masuk</div>
+                            <div class="info-value fs-4 text-success fw-bold">@absensi.JamMasuk</div>
+                            <div class="info-title mt-4">Jam Pulang</div>
+                            <div class="info-value fs-4 text-primary fw-bold">@absensi.JamPulang</div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- INFORMASI GURU -->
+        <div class="col-lg-4 mb-4">
+            <div class="card dashboard-card h-100">
+                <div class="card-body">
+                    <h4 class="card-title-custom mb-4">
+                        <i class="bi bi-person-vcard-fill text-danger me-2"></i> Informasi Guru
+                    </h4>
+                    <div class="info-item">
+                        <span class="info-title">NIP</span>
+                        <div class="info-value">@Model.Nip</div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-title">Jabatan</span>
+                        <div class="info-value">@Model.IdJabatanNavigation.NamaJabatan</div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-title">Status</span>
+                        <div>
+                            <span class="badge bg-success rounded-pill px-3 py-2">@Model.Status</span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-title">Email</span>
+                        <div class="info-value">@(string.IsNullOrWhiteSpace(Model.Email) ? "-" : Model.Email)</div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-title">No. HP</span>
+                        <div class="info-value">@(string.IsNullOrWhiteSpace(Model.NoHp) ? "-" : Model.NoHp)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ACTION TOMBOL ABSENSI -->
+        <div class="col-lg-4 mb-4">
+            <div class="card dashboard-card h-100">
+                <div class="card-body d-flex flex-column justify-content-center">
+                    <h4 class="card-title-custom text-center mb-4">
+                        <i class="bi bi-fingerprint text-danger me-2"></i> Absensi Guru
+                    </h4>
+                    @if (absensi == null)
+                    {
+                        <form asp-action="AbsenMasuk" method="post">
+                            <button class="btn btn-danger btn-lg btn-absen w-100">
+                                <i class="bi bi-box-arrow-in-right me-2"></i> Absen Masuk
+                            </button>
+                        </form>
+                    }
+                    else if (absensi.JamPulang == null)
+                    {
+                        <form asp-action="AbsenPulang" method="post">
+                            <button class="btn btn-success btn-lg btn-absen w-100">
+                                <i class="bi bi-box-arrow-right me-2"></i> Absen Pulang
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <button class="btn btn-secondary btn-lg btn-absen w-100" disabled>
+                            <i class="bi bi-check-circle-fill me-2"></i> Absensi Hari Ini Selesai
+                        </button>
+                    }
+                    <hr class="my-4" />
+                    <div class="text-center text-muted">
+                        <small>Terima kasih telah melakukan absensi hari ini.</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= RIWAYAT TERAKHIR ================= -->
+    <div class="card dashboard-card mt-2 mb-4">
+        <div class="card-header bg-white pt-3 pb-2 border-0">
+            <h5 class="fw-bold m-0">
+                <i class="bi bi-clock-history text-danger me-2"></i> Riwayat Absensi Terakhir
+            </h5>
+        </div>
+        <div class="card-body pt-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>Tanggal</th>
+                            <th>Masuk</th>
+                            <th>Pulang</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (ViewBag.Riwayat != null)
+                        {
+                            foreach (var item in ViewBag.Riwayat)
+                            {
+                                <tr>
+                                    <td>@item.Tanggal?.ToString("dd/MM/yyyy")</td>
+                                    <td>@item.JamMasuk</td>
+                                    <td>@(item.JamPulang ?? "-")</td>
+                                    <td>
+                                        @if (item.Status == "Hadir")
+                                        {
+                                            <span class="badge bg-success">Hadir</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger">@item.Status</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4" class="text-center text-muted py-3">Belum ada data riwayat absensi.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<style>
+.dashboard-header{
+    background: linear-gradient(135deg,#b71c1c,#ef5350);
+    border-radius:30px;
+    padding:40px 45px 55px 45px;
+    color:#fff;
+    overflow:hidden;
+    margin-bottom:45px;
+    box-shadow:0 15px 35px rgba(0,0,0,.15);
+    position:relative;
+}
+
+.profile-photo img{
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    object-fit:cover;
+    border:5px solid rgba(255,255,255,.95);
+    box-shadow:0 10px 25px rgba(0,0,0,.25);
+}
+
+.welcome-text{
+    font-size:24px;
+    font-weight:500;
+    letter-spacing:2px;
+    opacity:.95;
+    margin-top:8px;
+}
+
+.guru-name{
+    font-size:52px;
+    font-weight:800;
+    line-height:1;
+    margin:12px 0 8px 0;
+    text-transform:uppercase;
+    text-shadow:0 4px 12px rgba(0,0,0,.25);
+}
+
+.guru-jabatan{
+    font-size:22px;
+    font-weight:500;
+    margin-top:10px;
+    opacity:.95;
+}
+
+.time-box{
+    text-align:right;
+}
+
+.today{
+    font-size:21px;
+    font-weight:600;
+    margin-bottom:8px;
+}
+
+#clock{
+    font-size:52px;
+    font-weight:800;
+    letter-spacing:3px;
+    text-shadow:0 3px 10px rgba(0,0,0,.25);
+}
+
+.dashboard-card{
+    border:none;
+    border-radius:20px;
+    transition:.3s;
+    overflow:hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,.05);
+}
+
+.dashboard-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 18px 35px rgba(0,0,0,.12);
+}
+
+.card-body{
+    padding:30px;
+}
+
+.card-title-custom{
+    font-weight:700;
+}
+
+.status-icon{
+    width:90px;
+    height:90px;
+    background:#fdeaea;
+    color:#c62828;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:auto;
+    font-size:42px;
+}
+
+.info-item{
+    margin-bottom:22px;
+}
+
+.info-title{
+    color:#888;
+    font-size:14px;
+    margin-bottom:5px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+}
+
+.info-value{
+    font-size:18px;
+    font-weight:700;
+    color:#333;
+}
+
+.btn-absen{
+    border:none;
+    border-radius:18px;
+    padding:18px;
+    font-size:20px;
+    font-weight:700;
+    box-shadow:0 10px 20px rgba(0,0,0,.15);
+    transition:.35s;
+}
+
+.btn-absen:hover{
+    transform:translateY(-5px);
+}
+
+.mini-card{
+    color:white;
+    border-radius:20px;
+    padding:25px;
+    display:flex;
+    align-items:center;
+    gap:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,.12);
+    transition:.3s;
+}
+
+.mini-card:hover{
+    transform:translateY(-6px);
+}
+
+.mini-card i{
+    font-size:40px;
+    background:rgba(255,255,255,.2);
+    width:70px;
+    height:70px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    border-radius:18px;
+}
+
+.mini-card h4, .mini-card h5{
+    margin:0;
+    font-weight:700;
+}
+
+.mini-card small{
+    opacity:.9;
+    font-size:14px;
+}
+
+.quick-menu-btn {
+    text-decoration: none;
+    color: #333;
+    transition: all 0.3s ease;
+    border: 1px solid #f0f0f0;
+}
+
+.quick-menu-btn:hover {
+    background-color: #fff;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08) !important;
+}
+
+/* --- RESPONSIVE MEDIA QUERIES --- */
+@@media (max-width:991px){
+    .dashboard-header{
+        text-align:center;
+        padding:28px;
+    }
+    .profile-photo{
+        margin-bottom:20px;
+    }
+    .profile-photo img{
+        width:110px;
+        height:110px;
+    }
+    .guru-name{
+        font-size:34px;
+    }
+    .welcome-text{
+        font-size:18px;
+    }
+    .guru-jabatan{
+        font-size:16px;
+    }
+    .time-box{
+        margin-top:30px;
+        text-align:center;
+    }
+    .today{
+        font-size:18px;
+    }
+    #clock{
+        font-size:42px;
+    }
+}
+
+@@media (max-width:576px){
+    .dashboard-header{
+        padding:22px;
+    }
+    .profile-photo img{
+        width:95px;
+        height:95px;
+    }
+    .guru-name{
+        font-size:28px;
+    }
+    .welcome-text{
+        font-size:16px;
+    }
+    #clock{
+        font-size:34px;
+        letter-spacing:1px;
+    }
+    .today{
+        font-size:16px;
+    }
+    .card-body{
+        padding:22px;
+    }
+    .btn-absen{
+        font-size:17px;
+    }
+}
+</style>
+
+@section Scripts{
+<script>
+function updateClock(){
+    const now = new Date();
+    const jam = now.toLocaleTimeString('id-ID',{
+        hour:'2-digit',
+        minute:'2-digit',
+        second:'2-digit'
+    });
+    document.getElementById("clock").innerHTML = jam;
+}
+setInterval(updateClock,1000);
+updateClock();
+</script>
+}

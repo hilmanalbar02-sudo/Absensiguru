@@ -1,0 +1,126 @@
+@model Absensiguru.ViewModels.ProfilGuruViewModel
+
+@{
+    ViewData["Title"] = "Profil Saya";
+}
+
+<div class="container py-4">
+
+    @if (TempData["Sukses"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            @TempData["Sukses"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="card shadow border-0">
+
+        <div class="card-header bg-danger text-white">
+            <h4 class="mb-0">
+                <i class="bi bi-person-circle"></i>
+                Profil Guru
+            </h4>
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Profil"
+                  method="post"
+                  enctype="multipart/form-data">
+
+                <input asp-for="IdGuru" type="hidden" />
+
+                <div class="text-center mb-4">
+
+                    @if (!string.IsNullOrEmpty(Model.Foto))
+                    {
+                        <img src="~/uploads/guru/@Model.Foto"
+                             class="rounded-circle shadow"
+                             width="180"
+                             height="180"
+                             style="object-fit:cover;border:5px solid #dc3545;" />
+                    }
+                    else
+                    {
+                        <img src="~/images/default-user.png"
+                             class="rounded-circle shadow"
+                             width="180"
+                             height="180"
+                             style="object-fit:cover;border:5px solid #dc3545;" />
+                    }
+
+                    <div class="mt-3">
+                        <input asp-for="FotoBaru"
+                               class="form-control"
+                               type="file"
+                               accept=".jpg,.jpeg,.png" />
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Nama Guru</label>
+                        <input asp-for="NamaGuru"
+                               class="form-control"
+                               readonly />
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">NIP</label>
+                        <input asp-for="Nip"
+                               class="form-control"
+                               readonly />
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Jabatan</label>
+                        <input asp-for="Jabatan"
+                               class="form-control"
+                               readonly />
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Email</label>
+                        <input asp-for="Email"
+                               class="form-control"
+                               placeholder="Masukkan Email" />
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">No HP</label>
+                        <input asp-for="NoHp"
+                               class="form-control"
+                               placeholder="Masukkan Nomor HP" />
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label fw-bold">Alamat</label>
+                        <textarea asp-for="Alamat"
+                                  rows="4"
+                                  class="form-control"
+                                  placeholder="Masukkan Alamat"></textarea>
+                    </div>
+
+                </div>
+
+                <hr />
+
+                <div class="text-end">
+
+                    <button type="submit" class="btn btn-danger px-4">
+                        <i class="bi bi-save"></i>
+                        Simpan Perubahan
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

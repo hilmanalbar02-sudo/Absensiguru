@@ -4,120 +4,129 @@
     ViewData["Title"] = "Detail Guru";
 }
 
-<div class="container py-4">
+<div class="container-fluid py-2">
 
-    <div class="card shadow border-0 rounded-4">
-
-        <div class="card-header bg-danger text-white">
-
-            <h3 class="mb-0">
-                Detail Data Guru
-            </h3>
-
+    <div class="card page-card border-0">
+        
+        <!-- HEADER UTAMA -->
+        <div class="page-header bg-light">
+            <div class="d-flex align-items-center">
+                <a asp-action="Index" class="btn btn-light border me-3" style="border-radius: 12px; height: 42px; width: 42px; display: inline-flex; align-items: center; justify-content: center;">
+                    <i class="bi bi-arrow-left"></i>
+                </a>
+                <div>
+                    <h3 class="mb-0">
+                        <i class="bi bi-person-bounding-box me-2"></i>
+                        Detail Data Guru
+                    </h3>
+                    <p class="mb-0 text-muted">
+                        Informasi lengkap biodata guru SDN Emo Kurniaatmaja
+                    </p>
+                </div>
+            </div>
         </div>
 
-        <div class="card-body">
-
-            <div class="row">
-
-                <div class="col-md-3 text-center">
-
-                    <img src="~/images/user.png"
-                         class="img-fluid rounded-circle border shadow"
-                         style="width:170px;height:170px;object-fit:cover;" />
-
+        <!-- AREA BIODATA -->
+        <div class="card-body p-4">
+            <div class="row g-4">
+                
+                <!-- KOLOM FOTO PROFIL -->
+                <div class="col-md-3 text-center border-end border-light-subtle">
+                    <div class="mb-3 position-relative d-inline-block">
+                        @if (!string.IsNullOrEmpty(Model.Foto))
+                        {
+                            <img src="~/uploads/guru/@Model.Foto"
+                                 class="rounded-circle shadow-sm"
+                                 width="180"
+                                 height="180"
+                                 style="object-fit:cover; border: 4px solid #fff; box-shadow: 0 0 15px rgba(0,0,0,0.1) !important;" />
+                        }
+                        else
+                        {
+                            <img src="~/images/default-user.png"
+                                 class="rounded-circle shadow-sm"
+                                 width="180"
+                                 height="180"
+                                 style="object-fit:cover; border: 4px solid #fff; box-shadow: 0 0 15px rgba(0,0,0,0.1) !important;" />
+                        }
+                    </div>
+                    <h5 class="fw-bold text-dark mb-1">@Model.NamaGuru</h5>
+                    <p class="text-muted small mb-0">NIP. @Model.Nip</p>
                 </div>
 
+                <!-- KOLOM DETAIL INFORMASI -->
                 <div class="col-md-9">
-
-                    <table class="table table-borderless align-middle">
-
-                        <tr>
-                            <th width="220">Nama Guru</th>
-                            <td>: @Model.NamaGuru</td>
-                        </tr>
-
-                        <tr>
-                            <th>NIP</th>
-                            <td>: @Model.Nip</td>
-                        </tr>
-
-                        <tr>
-                            <th>Jenis Kelamin</th>
-                            <td>: @(Model.JenisKelamin == "L" ? "Laki-laki" : "Perempuan")</td>
-                        </tr>
-
-                        <tr>
-                            <th>Jabatan</th>
-                            <td>: @Model.IdJabatanNavigation.NamaJabatan</td>
-                        </tr>
-
-                        <tr>
-                            <th>Email</th>
-                            <td>: @Model.Email</td>
-                        </tr>
-
-                        <tr>
-                            <th>No HP</th>
-                            <td>: @Model.NoHp</td>
-                        </tr>
-
-                        <tr>
-                            <th>Alamat</th>
-                            <td>: @Model.Alamat</td>
-                        </tr>
-
-                        <tr>
-                            <th>Status</th>
-
-                            <td>
-
-                                @if (Model.Status == "Aktif")
-                                {
-                                    <span class="badge bg-success px-3 py-2">
-                                        Aktif
-                                    </span>
-                                }
-                                else
-                                {
-                                    <span class="badge bg-danger px-3 py-2">
-                                        Nonaktif
-                                    </span>
-                                }
-
-                            </td>
-
-                        </tr>
-
-                    </table>
-
+                    <div class="table-responsive">
+                        <table class="table table-modern table-borderless align-middle mb-0">
+                            <tbody>
+                                <tr>
+                                    <th width="200" class="text-muted fw-medium">Nama Lengkap</th>
+                                    <td class="fw-semibold text-dark">: @Model.NamaGuru</td>
+                                </tr>
+                                <tr>
+                                    <th class="text-muted fw-medium">NIP</th>
+                                    <td class="text-secondary">: @Model.Nip</td>
+                                </tr>
+                                <tr>
+                                    <th class="text-muted fw-medium">Jenis Kelamin</th>
+                                    <td class="text-secondary">: @(Model.JenisKelamin == "L" ? "Laki-laki" : "Perempuan")</td>
+                                </tr>
+                                <tr>
+                                    <th class="text-muted fw-medium">Jabatan</th>
+                                    <td>
+                                        : <span class="badge bg-light text-secondary border px-2 py-1">
+                                            @Model.IdJabatanNavigation?.NamaJabatan
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="text-muted fw-medium">Email</th>
+                                    <td class="text-secondary">: @Model.Email</td>
+                                </tr>
+                                <tr>
+                                    <th class="text-muted fw-medium">No. Handphone</th>
+                                    <td class="text-secondary">: @Model.NoHp</td>
+                                </tr>
+                                <tr>
+                                    <th class="text-muted fw-medium">Alamat Tinggal</th>
+                                    <td class="text-secondary">: @Model.Alamat</td>
+                                </tr>
+                                <tr>
+                                    <th class="text-muted fw-medium">Status Pegawai</th>
+                                    <td>
+                                        : @if (Model.Status == "Aktif")
+                                        {
+                                            <span class="badge rounded-pill bg-success-subtle text-success px-3 py-1 border border-success-subtle">
+                                                Aktif
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge rounded-pill bg-danger-subtle text-danger px-3 py-1 border border-danger-subtle">
+                                                Nonaktif
+                                            </span>
+                                        }
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
             </div>
-
         </div>
 
-        <div class="card-footer d-flex justify-content-between align-items-center">
-
-            <a asp-action="Index"
-               class="btn btn-secondary rounded-pill px-4">
-
-                <i class="fa-solid fa-arrow-left me-1"></i>
-                Kembali
-
-            </a>
-
-            <a asp-action="Edit"
-               asp-route-id="@Model.IdGuru"
-               class="btn btn-warning rounded-pill px-4">
-
-                <i class="fa-solid fa-pen-to-square me-1"></i>
-                Edit Data
-
-            </a>
-
+        <!-- FOOTER AKSI -->
+        <div class="card-footer bg-white py-3 border-top" style="border-top: 1px solid #eee !important;">
+            <div class="d-flex justify-content-between align-items-center">
+                <a asp-action="Index" class="btn btn-light border px-4" style="border-radius: 12px; height: 42px; display: inline-flex; align-items: center;">
+                    <i class="bi bi-arrow-left me-2"></i> Kembali
+                </a>
+                <a asp-action="Edit" asp-route-id="@Model.IdGuru" class="btn btn-warning text-dark px-4" style="border-radius: 12px; height: 42px; display: inline-flex; align-items: center; fw-medium">
+                    <i class="bi bi-pencil-square me-2"></i> Edit Data Guru
+                </a>
+            </div>
         </div>
 
     </div>
-
 </div>

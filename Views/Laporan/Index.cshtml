@@ -2,184 +2,185 @@
 
 @{
     Layout = "_AdminLayout";
-    ViewData["Title"] = "Laporan Absensi";
+    ViewData["Title"] = "Laporan Absensi | SIMAGU";
 
     int no = 1;
 }
 
-<div class="card shadow border-0 rounded-4">
+<div class="page-card">
 
-    <div class="card-header bg-danger text-white">
-        <h3 class="mb-0 fw-bold">
-            Laporan Absensi Guru
-        </h3>
+    <!-- 1. Header Baru -->
+    <div class="page-header d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold text-dark m-0">
+                <i class="bi bi-bar-chart-fill text-danger me-2"></i>
+                Laporan Absensi Guru
+            </h3>
+            <p class="text-muted small mb-0">
+                Rekapitulasi kehadiran guru pada sistem aplikasi SIMAGU
+            </p>
+        </div>
     </div>
 
-    <div class="card-body">
-
-        <form method="get">
-
-            <div class="row g-3">
-
-                <div class="col-md-3">
-
-                    <label class="form-label fw-semibold">
-                        Tanggal Awal
-                    </label>
-
-                    <input type="date"
-                           name="mulai"
-                           value="@ViewBag.Mulai"
-                           class="form-control" />
-
+    <!-- 3. Card Statistik -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card stat-card border-0 shadow-sm rounded-3">
+                <div class="card-body text-center py-3">
+                    <i class="bi bi-people-fill fs-3 text-primary mb-1 d-block"></i>
+                    <span class="text-muted small fw-semibold">Total Data</span>
+                    <h3 class="fw-bold m-0 text-dark">@Model.Count()</h3>
                 </div>
-
-                <div class="col-md-3">
-
-                    <label class="form-label fw-semibold">
-                        Tanggal Akhir
-                    </label>
-
-                    <input type="date"
-                           name="selesai"
-                           value="@ViewBag.Selesai"
-                           class="form-control" />
-
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stat-card border-0 shadow-sm rounded-3">
+                <div class="card-body text-center py-3">
+                    <i class="bi bi-check-circle-fill fs-3 text-success mb-1 d-block"></i>
+                    <span class="text-muted small fw-semibold">Hadir</span>
+                    <h3 class="fw-bold m-0 text-dark">@Model.Count(a => a.Status == "Hadir")</h3>
                 </div>
-
-                <div class="col-md-3">
-
-                    <label class="form-label fw-semibold">
-                        Status
-                    </label>
-
-                    <select name="status" class="form-select">
-
-                        <option value="">Semua</option>
-                        <option value="Hadir">Hadir</option>
-                        <option value="Izin">Izin</option>
-                        <option value="Sakit">Sakit</option>
-                        <option value="Alpha">Alpha</option>
-
-                    </select>
-
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stat-card border-0 shadow-sm rounded-3">
+                <div class="card-body text-center py-3">
+                    <i class="bi bi-envelope-fill fs-3 text-warning mb-1 d-block"></i>
+                    <span class="text-muted small fw-semibold">Izin / Sakit</span>
+                    <h3 class="fw-bold m-0 text-dark">@Model.Count(a => a.Status == "Izin" || a.Status == "Sakit")</h3>
                 </div>
-
-                <div class="col-md-3 d-flex align-items-end">
-
-                    <button class="btn btn-danger w-100">
-
-                        <i class="bi bi-search"></i>
-
-                        Tampilkan
-
-                    </button>
-
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stat-card border-0 shadow-sm rounded-3">
+                <div class="card-body text-center py-3">
+                    <i class="bi bi-x-circle-fill fs-3 text-danger mb-1 d-block"></i>
+                    <span class="text-muted small fw-semibold">Alpha</span>
+                    <h3 class="fw-bold m-0 text-dark">@Model.Count(a => a.Status == "Alpha")</h3>
                 </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- 2. Filter Modern (Form GET) -->
+    <form method="get" class="mb-4">
+        <div class="row g-3 align-items-end">
+            <div class="col-md-3">
+                <label class="form-label small fw-bold text-secondary">Tanggal Awal</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-white text-muted border-end-0">
+                        <i class="bi bi-calendar-event"></i>
+                    </span>
+                    <input type="date" name="mulai" value="@ViewBag.Mulai" class="form-control border-start-0 ps-0" />
+                </div>
             </div>
 
-        </form>
+            <div class="col-md-3">
+                <label class="form-label small fw-bold text-secondary">Tanggal Akhir</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-white text-muted border-end-0">
+                        <i class="bi bi-calendar-check"></i>
+                    </span>
+                    <input type="date" name="selesai" value="@ViewBag.Selesai" class="form-control border-start-0 ps-0" />
+                </div>
+            </div>
 
-        <hr />
+            <div class="col-md-3">
+                <label class="form-label small fw-bold text-secondary">Status Kehadiran</label>
+                <select name="status" class="form-select">
+                    <option value="">Semua Status</option>
+                    <option value="Hadir" selected="@(ViewBag.SelectedStatus == "Hadir" ? "selected" : null)">Hadir</option>
+                    <option value="Izin" selected="@(ViewBag.SelectedStatus == "Izin" ? "selected" : null)">Izin</option>
+                    <option value="Sakit" selected="@(ViewBag.SelectedStatus == "Sakit" ? "selected" : null)">Sakit</option>
+                    <option value="Alpha" selected="@(ViewBag.SelectedStatus == "Alpha" ? "selected" : null)">Alpha</option>
+                </select>
+            </div>
 
-        <div class="mb-3">
-
-            <a asp-action="ExportPdf"
-               class="btn btn-danger">
-
-                <i class="bi bi-file-earmark-pdf"></i>
-
-                Download PDF
-
-            </a>
-
-            <a asp-action="ExportExcel"
-               class="btn btn-success ms-2">
-
-                <i class="bi bi-file-earmark-excel"></i>
-
-                Export Excel
-
-            </a>
-
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-danger w-100 fw-semibold">
+                    <i class="bi bi-search me-1"></i> Tampilkan
+                </button>
+            </div>
         </div>
+    </form>
 
-        <div class="table-responsive">
+    <!-- 5. Tombol Export -->
+    <div class="mb-3 d-flex justify-content-end gap-2">
+        <a asp-action="ExportPdf" asp-route-mulai="@ViewBag.Mulai" asp-route-selesai="@ViewBag.Selesai" asp-route-status="@ViewBag.SelectedStatus" class="btn btn-outline-danger btn-sm px-3 fw-semibold rounded-2">
+            <i class="bi bi-file-earmark-pdf-fill me-1"></i> PDF
+        </a>
+        <a asp-action="ExportExcel" asp-route-mulai="@ViewBag.Mulai" asp-route-selesai="@ViewBag.Selesai" asp-route-status="@ViewBag.SelectedStatus" class="btn btn-outline-success btn-sm px-3 fw-semibold rounded-2">
+            <i class="bi bi-file-earmark-excel-fill me-1"></i> Excel
+        </a>
+    </div>
 
-            <table class="table table-bordered table-hover align-middle">
-
-                <thead class="table-danger text-center">
-
+    <!-- 4. Tabel Modern -->
+    <div class="table-responsive">
+        <table class="table table-modern align-middle m-0">
+            <thead>
+                <tr>
+                    <th width="60" class="text-center">No</th>
+                    <th>Nama Guru</th>
+                    <th class="text-center" width="150">Tanggal</th>
+                    <th class="text-center" width="130">Jam Masuk</th>
+                    <th class="text-center" width="130">Jam Pulang</th>
+                    <th class="text-center" width="130">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.Any())
+                {
                     <tr>
-
-                        <th width="60">No</th>
-                        <th>Nama Guru</th>
-                        <th width="150">Tanggal</th>
-                        <th width="120">Jam Masuk</th>
-                        <th width="120">Jam Pulang</th>
-                        <th width="120">Status</th>
-
+                        <td colspan="6" class="text-center text-muted py-4">
+                            <i class="bi bi-inbox fs-2 d-block mb-2"></i>
+                            Tidak ada data absensi yang ditemukan.
+                        </td>
                     </tr>
-
-                </thead>
-
-                <tbody>
-
+                }
+                else
+                {
                     @foreach (var item in Model)
                     {
                         <tr>
-
-                            <td class="text-center">
+                            <td class="text-center fw-semibold text-secondary">
                                 @(no++)
                             </td>
-
                             <td>
-                                @item.IdGuruNavigation.NamaGuru
+                                <div class="fw-bold text-dark">@item.IdGuruNavigation?.NamaGuru</div>
+                                <div class="text-muted small">NIP. @(item.IdGuruNavigation?.Nip ?? "-")</div>
                             </td>
-
-                            <td class="text-center">
-                                @item.Tanggal.ToString("dd/MM/yyyy")
+                            <td class="text-center font-monospace small">
+                                @(item.Tanggal.ToString("dd/MM/yyyy"))
                             </td>
-
-                            <td class="text-center">
+                            <td class="text-center font-monospace small">
                                 @(item.JamMasuk.HasValue ? item.JamMasuk.Value.ToString(@"HH\:mm") : "-")
                             </td>
-
-                            <td class="text-center">
+                            <td class="text-center font-monospace small">
                                 @(item.JamPulang.HasValue ? item.JamPulang.Value.ToString(@"HH\:mm") : "-")
                             </td>
-
                             <td class="text-center">
-
                                 @if (item.Status == "Hadir")
                                 {
-                                    <span class="badge bg-success">Hadir</span>
+                                    <span class="badge bg-success-subtle text-success px-2 py-1.5 rounded-2 w-100">Hadir</span>
                                 }
                                 else if (item.Status == "Izin")
                                 {
-                                    <span class="badge bg-warning text-dark">Izin</span>
+                                    <span class="badge bg-warning-subtle text-warning px-2 py-1.5 rounded-2 w-100">Izin</span>
                                 }
                                 else if (item.Status == "Sakit")
                                 {
-                                    <span class="badge bg-info">Sakit</span>
+                                    <span class="badge bg-info-subtle text-info px-2 py-1.5 rounded-2 w-100">Sakit</span>
                                 }
                                 else
                                 {
-                                    <span class="badge bg-danger">Alpha</span>
+                                    <span class="badge bg-danger-subtle text-danger px-2 py-1.5 rounded-2 w-100">Alpha</span>
                                 }
-
                             </td>
-
                         </tr>
                     }
-
-                </tbody>
-
-            </table>
-
-        </div>
-
+                }
+            </tbody>
+        </table>
     </div>
 
 </div>

@@ -1,97 +1,228 @@
 @model IEnumerable<Absensiguru.Models.Izin>
 
 @{
-    Layout="_AdminLayout";
-    ViewData["Title"]="Data Izin";
-    int no=1;
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Data Izin";
+    int no = 1;
 }
 
-<div class="card shadow rounded-4 border-0">
+<style>
+    .page-title{
+        font-size:30px;
+        font-weight:700;
+        color:#c00000;
+    }
 
-    <div class="card-header bg-danger text-white">
+    .subtitle{
+        color:#777;
+        margin-top:-8px;
+    }
 
-        <h3 class="mb-0">
-            Data Izin Guru
-        </h3>
+    .custom-card{
+        border:none;
+        border-radius:20px;
+        overflow:hidden;
+        box-shadow:0 10px 30px rgba(0,0,0,.08);
+    }
 
+    .table thead{
+        background:#c00000;
+        color:white;
+    }
+
+    .table tbody tr{
+        transition:.25s;
+    }
+
+    .table tbody tr:hover{
+        background:#fff4f4;
+    }
+
+    .table td,
+    .table th{
+        vertical-align:middle;
+    }
+
+    .foto-guru{
+        width:55px;
+        height:55px;
+        object-fit:cover;
+        border-radius:50%;
+        border:3px solid #fff;
+        box-shadow:0 3px 10px rgba(0,0,0,.2);
+    }
+
+    .badge-status{
+        padding:8px 14px;
+        border-radius:30px;
+        font-size:13px;
+    }
+
+    .btn-action{
+        width:38px;
+        height:38px;
+        border-radius:10px;
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+    }
+
+    .search-box{
+        width:300px;
+    }
+</style>
+
+<!-- NOTIFIKASI TAMPILAN -->
+@if (TempData["Sukses"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show mb-4 rounded-3" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i> @TempData["Sukses"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
+}
 
-    <div class="card-body">
-
-        <table class="table table-bordered table-hover">
-
-            <thead class="table-danger">
-
-                <tr class="text-center">
-
-                    <th>No</th>
-                    <th>Guru</th>
-                    <th>Tanggal</th>
-                    <th>Jenis</th>
-                    <th>Alasan</th>
-                    <th>Status</th>
-                    <th>Aksi</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-                @foreach(var item in Model)
-                {
-                    <tr>
-
-                        <td>@(no++)</td>
-
-                        <td>@item.IdGuruNavigation.NamaGuru</td>
-
-                        <td>@item.Tanggal.ToString("dd/MM/yyyy")</td>
-
-                        <td>@item.JenisIzin</td>
-
-                        <td>@item.Alasan</td>
-
-                        <td>
-
-                            @if(item.Status=="Disetujui")
-                            {
-                                <span class="badge bg-success">Disetujui</span>
-                            }
-                            else if(item.Status=="Menunggu")
-                            {
-                                <span class="badge bg-warning text-dark">Menunggu</span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-danger">Ditolak</span>
-                            }
-
-                        </td>
-
-                        <td class="text-center">
-
-                            <a asp-action="Details"
-                               asp-route-id="@item.IdIzin"
-                               class="btn btn-primary btn-sm">
-                                Detail
-                            </a>
-
-                            <a asp-action="Delete"
-                               asp-route-id="@item.IdIzin"
-                               class="btn btn-danger btn-sm">
-                                Hapus
-                            </a>
-
-                        </td>
-
-                    </tr>
-                }
-
-            </tbody>
-
-        </table>
-
+<!-- LANGKAH 2 — JUDUL HALAMAN MODERN -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <div class="page-title">
+            Data Pengajuan Izin
+        </div>
+        <div class="subtitle">
+            Kelola seluruh pengajuan izin guru SDN Emo Kurniaatmaja
+        </div>
     </div>
-
 </div>
+
+<!-- LANGKAH 3 — SEARCH BOX -->
+<div class="d-flex justify-content-end mb-3">
+    <input id="searchGuru" class="form-control search-box" placeholder="Cari Nama Guru..." />
+</div>
+
+<!-- LANGKAH 4 — BUNGKUS TABLE DENGAN CUSTOM CARD -->
+<div class="card custom-card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th width="60" class="text-center text-white">No</th>
+                        <th>Nama Guru</th>
+                        <th width="160">Jenis Izin</th>
+                        <th width="140" class="text-center">Tanggal</th>
+                        <th width="140" class="text-center">Status</th>
+                        <th width="100" class="text-center">Surat</th>
+                        <th width="140" class="text-center">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="text-center fw-medium text-secondary">
+                                    @(no++)
+                                </td>
+
+                                <!-- LANGKAH 5 — FOTO & DETAIL GURU -->
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        @if (string.IsNullOrEmpty(item.IdGuruNavigation?.Foto))
+                                        {
+                                            <img src="~/images/default-user.png" class="foto-guru me-3" alt="Default">
+                                        }
+                                        else
+                                        {
+                                            <img src="~/uploads/guru/@item.IdGuruNavigation.Foto" class="foto-guru me-3" alt="Foto @item.IdGuruNavigation.NamaGuru">
+                                        }
+                                        <div>
+                                            <b>@(item.IdGuruNavigation != null ? item.IdGuruNavigation.NamaGuru : "-")</b>
+                                            <br>
+                                            <small class="text-muted">
+                                                @(item.IdGuruNavigation != null ? item.IdGuruNavigation.Nip : "-")
+                                            </small>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <!-- JENIS IZIN -->
+                                <td>
+                                    <span class="text-dark fw-medium">@item.JenisIzin</span>
+                                </td>
+
+                                <!-- TANGGAL -->
+                                <td class="text-center text-secondary small">
+                                    @item.Tanggal.ToString("dd MMM yyyy")
+                                </td>
+
+                                <!-- LANGKAH 6 — BADGE STATUS MODERN -->
+                                <td class="text-center">
+                                    @if (item.Status == "Menunggu")
+                                    {
+                                        <span class="badge bg-warning text-dark badge-status">Menunggu</span>
+                                    }
+                                    else if (item.Status == "Disetujui")
+                                    {
+                                        <span class="badge bg-success badge-status">Disetujui</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary badge-status">Ditolak</span>
+                                    }
+                                </td>
+
+                                <!-- KOLOM SURAT PDF -->
+                                <td class="text-center">
+                                    @if (!string.IsNullOrEmpty(item.Bukti))
+                                    {
+                                        <a href="~/uploads/izin/@item.Bukti" target="_blank" class="btn btn-danger btn-action shadow-sm" title="Lihat Dokumen Pendukung">
+                                            <i class="bi bi-file-earmark-pdf-fill fs-5"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted small">-</span>
+                                    }
+                                </td>
+
+                                <!-- LANGKAH 7 — TOMBOL AKSI BERGAYA BARU -->
+                                <td class="text-center">
+                                    <a asp-action="Detail" asp-route-id="@item.IdIzin" class="btn btn-info btn-action text-white" title="Detail">
+                                        <i class="bi bi-eye-fill"></i>
+                                    </a>
+                                    <a asp-action="Edit" asp-route-id="@item.IdIzin" class="btn btn-warning btn-action text-white" title="Edit">
+                                        <i class="bi bi-pencil-fill"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center text-muted py-5 fs-6">
+                                <i class="bi bi-file-earmark-x d-block fs-2 mb-2 text-secondary opacity-50"></i>
+                                Belum ada pengajuan izin masuk.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- LANGKAH 8 — SEARCH OTOMATIS REAL-TIME -->
+@section Scripts {
+    <script>
+        document.getElementById("searchGuru").addEventListener("keyup", function () {
+            let value = this.value.toLowerCase();
+            document.querySelectorAll("tbody tr").forEach(function (row) {
+                // Pengecekan row dilakukan jika baris bukan baris data kosong ("Belum ada pengajuan izin")
+                if(row.cells.length > 1) {
+                    row.style.display = row.innerText.toLowerCase().includes(value) ? "" : "none";
+                }
+            });
+        });
+    </script>
+}

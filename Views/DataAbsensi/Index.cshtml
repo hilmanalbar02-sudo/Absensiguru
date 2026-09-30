@@ -7,194 +7,179 @@
     int no = 1;
 }
 
-<div class="card shadow border-0 rounded-4">
+<div class="page-card shadow-sm border-0 rounded-4 bg-white p-4">
 
-    <div class="card-header bg-danger text-white">
-
-        <h3 class="mb-0 fw-bold">
-            Data Absensi Guru
-        </h3>
-
+    <!-- LANGKAH 1: HEADER HALAMAN BARU -->
+    <div class="page-header d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold text-dark mb-1">
+                <i class="bi bi-calendar-check-fill text-danger me-2"></i>
+                Data Absensi Guru
+            </h3>
+            <p class="text-muted mb-0 small">
+                Kelola seluruh data kehadiran guru SDN Emo Kurniaatmaja
+            </p>
+        </div>
     </div>
 
-    <div class="card-body">
+    <div class="card-body p-0">
 
+        <!-- NOTIFIKASI SUKSES -->
         @if (TempData["Success"] != null)
         {
-            <div class="alert alert-success alert-dismissible fade show">
-
-                @TempData["Success"]
-
-                <button type="button"
-                        class="btn-close"
-                        data-bs-dismiss="alert">
-                </button>
-
+            <div class="alert alert-success alert-dismissible fade show mb-4 rounded-3" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i> @TempData["Success"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         }
 
-        <form method="get">
-
-            <div class="row mb-4">
-
-                <div class="col-md-10">
-
-                    <input type="text"
-                           name="searchString"
-                           value="@ViewBag.Search"
-                           class="form-control"
-                           placeholder="Cari nama guru atau status..." />
-
-                </div>
-
-                <div class="col-md-2">
-
-                    <button class="btn btn-danger w-100">
+        <!-- LANGKAH 2: INPUT PENCARIAN REAL-TIME -->
+        <div class="row mb-4">
+            <div class="col-md-5">
+                <div class="input-group shadow-sm rounded-3 overflow-hidden">
+                    <span class="input-group-text bg-white border-end-0 text-muted">
                         <i class="bi bi-search"></i>
-                        Cari
-                    </button>
-
+                    </span>
+                    <input id="searchGuru" 
+                           type="text" 
+                           class="form-control border-start-0 ps-0" 
+                           placeholder="Cari Nama Guru..." style="border-radius: 0 8px 8px 0;" />
                 </div>
-
             </div>
+        </div>
 
-        </form>
-
+        <!-- LANGKAH 3: STRUKTUR TABEL MODERN -->
         <div class="table-responsive">
-
-            <table class="table table-bordered table-hover align-middle">
-
-                <thead class="table-danger text-center">
-
+            <table class="table table-modern align-middle table-hover">
+                <thead>
                     <tr>
-
-                        <th width="60">No</th>
-
+                        <th width="60" class="text-center">No</th>
+                        <th width="80">Foto</th>
                         <th>Nama Guru</th>
-
-                        <th width="130">Tanggal</th>
-
-                        <th width="100">Masuk</th>
-
-                        <th width="100">Pulang</th>
-
-                        <th width="120">Status</th>
-
-                        <th>Keterangan</th>
-
-                        <th width="180">
-                            Aksi
-                        </th>
-
+                        <th width="130" class="text-center">Tanggal</th>
+                        <th width="110" class="text-center">Jam Masuk</th>
+                        <th width="110" class="text-center">Jam Pulang</th>
+                        <th width="120" class="text-center">Status</th>
+                        <th width="130" class="text-center">Aksi</th>
                     </tr>
-
                 </thead>
-
-                <tbody>
-
+                <tbody id="tableGuru">
                     @if (Model.Any())
                     {
-                        @foreach (var item in Model)
+                        foreach (var item in Model)
                         {
                             <tr>
-
-                                <td class="text-center">
+                                <td class="text-center fw-medium text-secondary">
                                     @(no++)
                                 </td>
 
+                                <!-- LANGKAH 4: FOTO GURU -->
                                 <td>
-                                    @item.IdGuruNavigation.NamaGuru
+                                    @if (!string.IsNullOrEmpty(item.IdGuruNavigation?.Foto))
+                                    {
+                                        <img src="~/uploads/guru/@item.IdGuruNavigation.Foto" 
+                                             width="50" 
+                                             height="50" 
+                                             class="rounded-circle shadow-sm object-fit-cover border" 
+                                             alt="Foto @item.IdGuruNavigation.NamaGuru">
+                                    }
+                                    else
+                                    {
+                                        <img src="~/images/default-user.png" 
+                                             width="50" 
+                                             height="50" 
+                                             class="rounded-circle shadow-sm border" 
+                                             alt="Default">
+                                    }
                                 </td>
 
-                                <td class="text-center">
+                                <!-- NAMA GURU -->
+                                <td>
+                                    <span class="fw-bold text-dark">
+                                        @(item.IdGuruNavigation != null ? item.IdGuruNavigation.NamaGuru : "-")
+                                    </span>
+                                </td>
+
+                                <!-- TANGGAL -->
+                                <td class="text-center text-secondary small">
                                     @item.Tanggal.ToString("dd/MM/yyyy")
                                 </td>
 
-                                <td class="text-center">
+                                <!-- JAM MASUK -->
+                                <td class="text-center font-monospace small">
                                     @(item.JamMasuk.HasValue ? item.JamMasuk.Value.ToString("HH\\:mm") : "-")
                                 </td>
 
-                                <td class="text-center">
+                                <!-- JAM PULANG -->
+                                <td class="text-center font-monospace small">
                                     @(item.JamPulang.HasValue ? item.JamPulang.Value.ToString("HH\\:mm") : "-")
                                 </td>
 
+                                <!-- LANGKAH 5: STATUS BERWARNA -->
                                 <td class="text-center">
-
-                                    @switch (item.Status)
+                                    @if (item.Status == "Hadir")
                                     {
-                                        case "Hadir":
-                                            <span class="badge bg-success">Hadir</span>
-                                            break;
-
-                                        case "Izin":
-                                            <span class="badge bg-warning text-dark">Izin</span>
-                                            break;
-
-                                        case "Sakit":
-                                            <span class="badge bg-info">Sakit</span>
-                                            break;
-
-                                        default:
-                                            <span class="badge bg-danger">Alpha</span>
-                                            break;
+                                        <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1.5 rounded-pill">Hadir</span>
                                     }
-
+                                    else if (item.Status == "Izin")
+                                    {
+                                        <span class="badge bg-warning-subtle text-warning border border-warning-subtle px-3 py-1.5 text-dark rounded-pill">Izin</span>
+                                    }
+                                    else if (item.Status == "Sakit")
+                                    {
+                                        <span class="badge bg-info-subtle text-info border border-info-subtle px-3 py-1.5 rounded-pill">Sakit</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-3 py-1.5 rounded-pill">Alpha</span>
+                                    }
                                 </td>
 
-                                <td>
-                                    @(string.IsNullOrEmpty(item.Keterangan) ? "-" : item.Keterangan)
-                                </td>
-
+                                <!-- LANGKAH 6: TOMBOL AKSI (TANPA HAPUS) -->
                                 <td class="text-center">
-
-                                    <a asp-action="Details"
-                                       asp-route-id="@item.IdAbsensi"
-                                       class="btn btn-primary btn-sm">
-
-                                        <i class="bi bi-eye-fill"></i>
-
-                                    </a>
-
-                                    <a asp-action="Edit"
-                                       asp-route-id="@item.IdAbsensi"
-                                       class="btn btn-warning btn-sm text-white">
-
-                                        <i class="bi bi-pencil-fill"></i>
-
-                                    </a>
-
-                                    <a asp-action="Delete"
-                                       asp-route-id="@item.IdAbsensi"
-                                       class="btn btn-danger btn-sm">
-
-                                        <i class="bi bi-trash-fill"></i>
-
-                                    </a>
-
+                                    <div class="d-inline-flex gap-1">
+                                        <a asp-action="Details" asp-route-id="@item.IdAbsensi" class="btn btn-primary btn-sm btn-action d-flex align-items-center justify-content-center style="width: 32px; height: 32px; border-radius: 8px;" title="Lihat Detail">
+                                            <i class="bi bi-eye-fill"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@item.IdAbsensi" class="btn btn-warning btn-sm btn-action text-white d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; border-radius: 8px;" title="Ubah Data">
+                                            <i class="bi bi-pencil-fill"></i>
+                                        </a>
+                                    </div>
                                 </td>
-
                             </tr>
                         }
                     }
                     else
                     {
                         <tr>
-
-                            <td colspan="8" class="text-center text-muted py-4">
-
-                                Belum ada data absensi.
-
+                            <td colspan="8" class="text-center text-muted py-5 fs-6">
+                                <i class="bi bi-calendar-x d-block fs-2 mb-2 text-secondary opacity-50"></i>
+                                Belum ada data absensi yang tercatat.
                             </td>
-
                         </tr>
                     }
-
                 </tbody>
-
             </table>
-
         </div>
 
     </div>
-
 </div>
+
+<!-- LANGKAH 7: SEARCH OTOMATIS (JAVASCRIPT CLIENT-SIDE) -->
+@section Scripts {
+    <script>
+        document.getElementById("searchGuru").addEventListener("keyup", function () {
+            let filter = this.value.toLowerCase();
+            let rows = document.querySelectorAll("#tableGuru tr");
+
+            rows.forEach(function (row) {
+                // Mengambil kolom ke-3 (indeks 2) yaitu kolom Nama Guru
+                let namaCell = row.cells[2];
+                if (namaCell) {
+                    let nama = namaCell.innerText.toLowerCase();
+                    row.style.display = nama.includes(filter) ? "" : "none";
+                }
+            });
+        });
+    </script>
+}

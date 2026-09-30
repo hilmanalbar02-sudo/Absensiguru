@@ -1,344 +1,243 @@
-@using Microsoft.AspNetCore.Http
-
 @{
-    Layout = "_AdminLayout";
-    ViewData["Title"] = "Dashboard Admin";
+    ViewData["Title"] = "Dashboard Admin | SIMAGU";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
 
-    var nama = Context.Session.GetString("NamaGuru");
-
-    if (string.IsNullOrEmpty(nama))
-    {
-        nama = Context.Session.GetString("Username");
-    }
+    // Kalkulasi persentase kehadiran untuk progress bar
+    int totalGuru = ViewBag.TotalGuru ?? 0;
+    int hadir = ViewBag.Hadir ?? 0;
+    double persentaseHadir = totalGuru > 0 ? Math.Round((double)hadir / totalGuru * 100) : 0;
 }
 
 <style>
-
-    .stat-card{
-        transition:.3s;
-        border:none;
-        border-radius:18px;
+    /* Animasi Hover untuk Card Statistik */
+    .stat-card-custom {
+        transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
+        border-radius: 20px !important;
+        overflow: hidden;
     }
 
-    .stat-card:hover{
-        transform:translateY(-6px);
-        box-shadow:0 .7rem 1.5rem rgba(0,0,0,.15)!important;
+    .stat-card-custom:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15) !important;
     }
 
-    .menu-card{
-        transition:.3s;
-        border-radius:18px;
+    /* Kustomisasi Progress Bar mini di dalam card */
+    .card-progress {
+        height: 8px;
+        background-color: rgba(255, 255, 255, 0.25);
     }
-
-    .menu-card:hover{
-        background:#dc3545;
-        color:#fff!important;
-        transform:translateY(-5px);
-    }
-
-    .menu-card:hover i,
-    .menu-card:hover strong{
-        color:#fff!important;
-    }
-
-    .menu-icon{
-        font-size:50px;
-        color:#dc3545;
-    }
-
 </style>
 
-<div class="container-fluid">
+<!-- HEADER DASHBOARD -->
+<div class="mb-4">
+    <h2 class="fw-bold text-dark">Dashboard Administrator SIMAGU</h2>
+    <p class="text-muted">Monitoring absensi dan manajemen data guru secara realtime.</p>
+</div>
 
-    <!-- HEADER -->
-
-    <div class="card shadow border-0 rounded-4 mb-4">
-
-        <div class="card-body py-4">
-
-            <div class="row align-items-center">
-
-                <div class="col-md-8">
-
-                    <h2 class="fw-bold text-danger mb-2">
-                        Selamat Datang, @nama 👋
-                    </h2>
-
-                    <p class="text-muted mb-1">
-                        Selamat bekerja dan semoga aktivitas hari ini berjalan lancar.
-                    </p>
-
-                    <small class="text-secondary">
-                        Sistem Informasi Absensi Guru
-                    </small>
-
-                </div>
-
-                <div class="col-md-4 text-end">
-
-                    <h5 class="fw-bold text-danger">
-                        @DateTime.Now.ToString("dddd")
-                    </h5>
-
-                    <div class="text-muted mb-2">
-                        @DateTime.Now.ToString("dd MMMM yyyy")
+<!-- TAMPILAN CARD STATISTIK MODERN -->
+<div class="row g-4">
+    <!-- Card 1: Total Guru -->
+    <div class="col-xl-3 col-md-6">
+        <div class="card stat-card-custom border-0 shadow-sm text-white h-100" style="background: linear-gradient(135deg, #4f46e5, #3b82f6);">
+            <div class="card-body d-flex flex-column justify-content-between p-4">
+                <div>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <small class="text-white-50 fw-bold text-uppercase tracking-wider">Total Guru</small>
+                        <i class="bi bi-people-fill fs-2 opacity-75"></i>
                     </div>
-
-                    <span class="badge bg-success px-3 py-2">
-                        Online
+                    <h1 class="fw-bold mb-1 display-5">@totalGuru</h1>
+                    <span class="badge bg-white bg-opacity-25 text-white small">
+                        <i class="bi bi-check-circle-fill me-1"></i> Data Aktif Sekolah
                     </span>
-
                 </div>
-
+                <div class="mt-4">
+                    <a asp-controller="Guru" asp-action="Index" class="btn btn-sm btn-light text-primary w-100 fw-semibold rounded-pill py-2">
+                        <i class="bi bi-person-lines-fill me-1"></i> Kelola Guru
+                    </a>
+                </div>
             </div>
-
         </div>
-
     </div>
 
-
-    <!-- STATISTIK -->
-
-    <div class="row g-4 mb-5">
-
-        <div class="col-lg-3 col-md-6">
-
-            <div class="card shadow stat-card">
-
-                <div class="card-body">
-
-                    <div class="d-flex justify-content-between align-items-center">
-
-                        <div>
-
-                            <small class="text-muted">
-                                Total Guru
-                            </small>
-
-                            <h2 class=""fw-bold text-success">
-                                12
-                            </h2>
-
-                        </div>
-
-                        <i class="bi bi-people-fill text-danger"
-                           style="font-size:55px;"></i>
-
+    <!-- Card 2: Hadir Hari Ini -->
+    <div class="col-xl-3 col-md-6">
+        <div class="card stat-card-custom border-0 shadow-sm text-white h-100" style="background: linear-gradient(135deg, #10b981, #059669);">
+            <div class="card-body d-flex flex-column justify-content-between p-4">
+                <div>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <small class="text-white-50 fw-bold text-uppercase tracking-wider">Hadir Hari Ini</small>
+                        <i class="bi bi-person-check-fill fs-2 opacity-75"></i>
                     </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="col-lg-3 col-md-6">
-
-            <div class="card shadow stat-card">
-
-                <div class="card-body">
-
-                    <div class="d-flex justify-content-between align-items-center">
-
-                        <div>
-
-                            <small class="text-muted">
-                                Hadir Hari Ini
-                            </small>
-
-                            <h2 class="fw-bold text-success mt-2
-                            @ViewBag.Hadir">
-                                0
-                            </h2>
-
-                        </div>
-
-                        <i class="bi bi-check-circle-fill text-success"
-                           style="font-size:55px;"></i>
-
+                    <h1 class="fw-bold mb-1 display-5">@hadir</h1>
+                    
+                    <!-- Progress Bar Indikator Rasio Kehadiran -->
+                    <div class="progress card-progress mt-3 mb-1 rounded-pill">
+                        <div class="progress-bar bg-white rounded-pill" role="progressbar" style="width: @persentaseHadir%" aria-valuenow="@persentaseHadir" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
-
+                    <small class="text-white-50 font-monospace">@hadir / @totalGuru Guru (@persentaseHadir%)</small>
                 </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="col-lg-3 col-md-6">
-
-            <div class="card shadow stat-card">
-
-                <div class="card-body">
-
-                    <div class="d-flex justify-content-between align-items-center">
-
-                        <div>
-
-                            <small class="text-muted">
-                                Izin / Sakit
-                            </small>
-
-                            <h2 class="fw-bold text-warning mt-2
-                            @ViewBag.Izin">
-                                0
-                            </h2>
-
-                        </div>
-
-                        <i class="bi bi-file-earmark-medical-fill text-warning"
-                           style="font-size:55px;"></i>
-
-                    </div>
-
+                <div class="mt-4">
+                    <a asp-controller="DataAbsensi" asp-action="Index" class="btn btn-sm btn-light text-success w-100 fw-semibold rounded-pill py-2">
+                        <i class="bi bi-eye-fill me-1"></i> Lihat Absensi
+                    </a>
                 </div>
-
             </div>
-
         </div>
-
-
-        <div class="col-lg-3 col-md-6">
-
-            <div class="card shadow stat-card">
-
-                <div class="card-body">
-
-                    <div class="d-flex justify-content-between align-items-center">
-
-                        <div>
-
-                            <small class="text-muted">
-                                Alpha
-                            </small>
-
-                            <h2 class="fw-bold text-danger mt-2
-                            @ViewBag.Alpha">
-                                0
-                            </h2>
-
-                        </div>
-
-                        <i class="bi bi-x-circle-fill text-danger"
-                           style="font-size:55px;"></i>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
     </div>
 
-
-    <!-- MENU -->
-
-    <div class="card shadow border-0 rounded-4">
-
-        <div class="card-header bg-danger text-white">
-
-            <h4 class="mb-0">
-                Menu Administrator
-            </h4>
-
-        </div>
-
-        <div class="card-body">
-
-            <div class="row g-4">
-
-                <div class="col-lg-4 col-md-6">
-
-                    <a asp-controller="DataGuru"
-                       asp-action="Index"
-                       class="btn btn-outline-danger w-100 py-4 menu-card">
-
-                        <i class="bi bi-people-fill menu-icon"></i>
-
-                        <br /><br />
-
-                        <strong>Data Guru</strong>
-
-                    </a>
-
+    <!-- Card 3: Izin/Sakit -->
+    <div class="col-xl-3 col-md-6">
+        <div class="card stat-card-custom border-0 shadow-sm text-white h-100" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+            <div class="card-body d-flex flex-column justify-content-between p-4">
+                <div>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <small class="text-white-50 fw-bold text-uppercase tracking-wider">Izin / Sakit</small>
+                        <i class="bi bi-envelope-paper-fill fs-2 opacity-75"></i>
+                    </div>
+                    <h1 class="fw-bold mb-1 display-5">@ViewBag.Izin</h1>
+                    <span class="badge bg-white bg-opacity-25 text-white small">
+                        <i class="bi bi-file-earmark-text me-1"></i> Dengan Keterangan
+                    </span>
                 </div>
-
-                <div class="col-lg-4 col-md-6">
-
-                    <a asp-controller="DataUser"
-                       asp-action="Index"
-                       class="btn btn-outline-danger w-100 py-4 menu-card">
-
-                        <i class="bi bi-person-fill-gear menu-icon"></i>
-
-                        <br /><br />
-
-                        <strong>Data User</strong>
-
+                <div class="mt-4">
+                    <a asp-controller="DataAbsensi" asp-action="Index" asp-route-status="Izin" class="btn btn-sm btn-light text-warning w-100 fw-semibold rounded-pill py-2">
+                        <i class="bi bi-search me-1"></i> Cek Keterangan
                     </a>
-
                 </div>
-
-                <div class="col-lg-4 col-md-6">
-
-                    <a asp-controller="DataAbsensi"
-                       asp-action="Index"
-                       class="btn btn-outline-danger w-100 py-4 menu-card">
-
-                        <i class="bi bi-calendar-check-fill menu-icon"></i>
-
-                        <br /><br />
-
-                        <strong>Data Absensi</strong>
-
-                    </a>
-
-                </div>
-
-                <div class="col-lg-4 col-md-6">
-
-                    <a asp-controller="DataIzin"
-                       asp-action="Index"
-                       class="btn btn-outline-danger w-100 py-4 menu-card">
-
-                        <i class="bi bi-file-earmark-medical-fill menu-icon"></i>
-
-                        <br /><br />
-
-                        <strong>Data Izin</strong>
-
-                    </a>
-
-                </div>
-
-                <div class="col-lg-4 col-md-6">
-
-                    <a asp-controller="Laporan"
-                       asp-action="Index"
-                       class="btn btn-outline-danger w-100 py-4 menu-card">
-
-                        <i class="bi bi-bar-chart-fill menu-icon"></i>
-
-                        <br /><br />
-
-                        <strong>Laporan</strong>
-
-                    </a>
-
-                </div>
-
             </div>
-
         </div>
-
     </div>
 
+    <!-- Card 4: Alpha / Belum Absen -->
+    <div class="col-xl-3 col-md-6">
+        <div class="card stat-card-custom border-0 shadow-sm text-white h-100" style="background: linear-gradient(135deg, #ff9800, #ff5722);">
+            <div class="card-body d-flex flex-column justify-content-between p-4">
+                <div>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <small class="text-white-50 fw-bold text-uppercase tracking-wider">Absen / Alpha</small>
+                        <i class="bi bi-person-fill-exclamation fs-2 opacity-75"></i>
+                    </div>
+                    <h1 class="fw-bold mb-1 display-5">@ViewBag.Alpha</h1>
+                    <span class="badge bg-white bg-opacity-25 text-white small">
+                        <i class="bi bi-exclamation-triangle-fill me-1"></i> Tanpa Keterangan
+                    </span>
+                </div>
+                <div class="mt-4">
+                    <a asp-controller="DataAbsensi" asp-action="Index" asp-route-status="Alpha" class="btn btn-sm btn-light text-danger w-100 fw-semibold rounded-pill py-2">
+                        <i class="bi bi-bell-fill me-1"></i> Tindak Lanjuti
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-        </div>
 
+<!-- GRAFIK STATISTIK KEHADIRAN -->
+<div class="row mt-4 g-4">
+    <div class="col-lg-8">
+        <div class="card shadow border-0 rounded-4">
+            <div class="card-header bg-white py-3 border-0">
+                <h5 class="fw-bold mb-0 text-dark">Grafik Kehadiran Guru</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="chartAbsensi" height="110"></canvas>
+            </div>
+        </div>
     </div>
 
+    <div class="col-lg-4">
+        <div class="card shadow border-0 rounded-4">
+            <div class="card-header bg-white py-3 border-0">
+                <h5 class="fw-bold mb-0 text-dark">Persentase Kehadiran</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="chartPie"></canvas>
+            </div>
+        </div>
+    </div>
 </div>
+
+<!-- TABEL GURU BELUM ABSEN -->
+<div class="card shadow border-0 rounded-4 mt-4">
+    <div class="card-header bg-danger text-white py-3">
+        <h5 class="mb-0 fw-bold">Guru Belum Absen Hari Ini</h5>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-4">Nama Guru</th>
+                        <th>Jabatan</th>
+                        <th class="pe-4">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (ViewBag.BelumAbsen != null)
+                    {
+                        foreach(var item in ViewBag.BelumAbsen)
+                        {
+                            <tr>
+                                <td class="ps-4 fw-semibold text-dark">@item.NamaGuru</td>
+                                <td>@item.IdJabatanNavigation?.NamaJabatan</td>
+                                <td class="pe-4">
+                                    <span class="badge bg-danger-subtle text-danger px-3 py-2 rounded-pill fw-semibold">
+                                        Belum Absen
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3" class="text-center py-4 text-muted">
+                                <i class="bi bi-check2-all text-success fs-3 d-block mb-2"></i>
+                                Semua guru sudah melakukan absensi hari ini.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // 1. Inisialisasi Grafik Batang (Bar Chart)
+        const ctx = document.getElementById('chartAbsensi');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Hadir', 'Izin', 'Alpha'],
+                datasets: [{
+                    label: 'Jumlah Guru',
+                    data: [@ViewBag.Hadir, @ViewBag.Izin, @ViewBag.Alpha],
+                    backgroundColor: ['#10b981', '#f59e0b', '#ff5722'],
+                    borderRadius: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+            }
+        });
+
+        // 2. Inisialisasi Grafik Lingkaran (Doughnut Chart)
+        const pie = document.getElementById('chartPie');
+        new Chart(pie, {
+            type: 'doughnut',
+            data: {
+                labels: ['Hadir', 'Izin', 'Alpha'],
+                datasets: [{
+                    data: [@ViewBag.Hadir, @ViewBag.Izin, @ViewBag.Alpha],
+                    backgroundColor: ['#10b981', '#f59e0b', '#ff5722']
+                }]
+            },
+            options: { responsive: true }
+        });
+    </script>
+}

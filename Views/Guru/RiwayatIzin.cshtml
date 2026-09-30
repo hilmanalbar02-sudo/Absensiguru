@@ -1,0 +1,87 @@
+@model IEnumerable<Absensiguru.Models.Izin>
+
+@{
+    ViewData["Title"] = "Riwayat Izin";
+}
+
+<div class="card shadow rounded-4">
+
+    <div class="card-header bg-danger text-white">
+
+        <h3>
+            Riwayat Pengajuan Izin
+        </h3>
+
+    </div>
+
+    <div class="card-body">
+
+        <table class="table table-hover table-bordered">
+
+            <thead class="table-danger">
+
+                <tr>
+
+                    <th>No</th>
+                    <th>Tanggal</th>
+                    <th>Jenis</th>
+                    <th>Alasan</th>
+                    <th>Status</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @{
+                    int no = 1;
+                }
+
+                @foreach(var item in Model)
+                {
+                    <tr>
+
+                        <td>@no</td>
+
+                        <td>@item.Tanggal</td>
+
+                        <td>@item.JenisIzin</td>
+
+                        <td>@item.Alasan</td>
+
+                        <td>
+
+                            @if(item.Status=="Menunggu")
+                            {
+                                <span class="badge bg-warning">
+                                    Menunggu
+                                </span>
+                            }
+                            else if(item.Status=="Disetujui")
+                            {
+                                <span class="badge bg-success">
+                                    Disetujui
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">
+                                    Ditolak
+                                </span>
+                            }
+
+                        </td>
+
+                    </tr>
+
+                    no++;
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>

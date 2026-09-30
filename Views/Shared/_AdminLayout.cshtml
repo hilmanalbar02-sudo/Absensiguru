@@ -4,199 +4,346 @@
 <html lang="id">
 
 <head>
-
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>@ViewData["Title"] - Sistem Absensi Guru</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-          rel="stylesheet" />
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
-          rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
 
     <style>
-
-        body{
-            margin:0;
-            background:#f5f6fa;
-            font-family:'Segoe UI',sans-serif;
+        body {
+            margin: 0;
+            background: #eef2f7;
+            font-family: 'Segoe UI', sans-serif;
         }
 
-        .sidebar{
-            position:fixed;
-            left:0;
-            top:0;
-            width:260px;
-            height:100vh;
-            background:linear-gradient(180deg,#c40000,#ff2d2d);
-            color:white;
-            overflow:auto;
-            box-shadow:0 0 20px rgba(0,0,0,.15);
+        /* =======================
+           SIDEBAR
+        ======================= */
+        .sidebar {
+            position: fixed;
+            left: 15px;
+            top: 15px;
+            bottom: 15px;
+            width: 270px;
+            border-radius: 22px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            background: linear-gradient(180deg, #b30000, #ff3131);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, .18);
         }
 
-        .logo{
-            text-align:center;
-            padding:30px 20px;
-            border-bottom:1px solid rgba(255,255,255,.15);
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
         }
 
-        .logo img{
-            width:80px;
-            margin-bottom:15px;
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, .35);
+            border-radius: 20px;
         }
 
-        .logo h5{
-            margin:0;
-            font-weight:bold;
+        .logo {
+            text-align: center;
+            padding: 35px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, .15);
         }
 
-        .logo small{
-            opacity:.9;
+        .logo img {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            margin-bottom: 15px;
         }
 
-        .menu{
-            margin-top:20px;
+        .logo h5 {
+            color: white;
+            font-weight: 700;
+            letter-spacing: 1px;
         }
 
-        .menu a{
-            display:block;
-            color:white;
-            text-decoration:none;
-            padding:15px 25px;
-            transition:.3s;
-            font-size:15px;
+        .logo small {
+            color: #f5f5f5;
         }
 
-        .menu a:hover{
-            background:rgba(255,255,255,.15);
-            padding-left:35px;
+        /* =======================
+           MENU SIDEBAR
+        ======================= */
+        .menu {
+            padding: 15px 0;
         }
 
-        .menu a.active{
-            background:rgba(255,255,255,.20);
-            border-left:5px solid white;
+        .sidebar .menu a {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            color: white;
+            text-decoration: none;
+            padding: 14px 18px;
+            border-radius: 12px;
+            margin: 6px 12px;
+            transition: .35s;
         }
 
-        .menu i{
-            width:25px;
+        .sidebar .menu a:hover {
+            background: white;
+            color: #d60000;
+            transform: translateX(8px);
         }
 
-        .content{
-            margin-left:260px;
-            min-height:100vh;
+        .sidebar .menu a i {
+            font-size: 20px;
+            width: 25px;
         }
 
-        .topbar{
-            background:white;
-            padding:18px 30px;
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            box-shadow:0 5px 15px rgba(0,0,0,.08);
+        .sidebar .menu a:hover i {
+            color: #d60000;
         }
 
-        .main-content{
-            padding:30px;
+        .sidebar .menu a.active {
+            background: white;
+            color: #d60000;
+        }
+        
+        .sidebar .menu a.active i {
+            color: #d60000;
         }
 
+        /* =======================
+           CONTENT AREA
+        ======================= */
+        .content {
+            margin-left: 305px;
+            min-height: 100vh;
+        }
+
+        /* =======================
+           TOPBAR MODERN
+        ======================= */
+        .topbar {
+            margin: 15px;
+            border-radius: 18px;
+            background: white;
+            padding: 18px 28px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, .08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .main-content {
+            padding: 20px;
+        }
+
+        /* =======================
+           DASHBOARD CARDS
+        ======================= */
+        .dashboard-card {
+            border: none;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: .3s;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+            background: white;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .dashboard-icon {
+            font-size: 55px;
+            opacity: 0.9;
+            position: absolute;
+            right: 25px;
+            top: 20px;
+        }
+
+        .dashboard-body {
+            position: relative;
+            padding: 25px;
+        }
+
+        /* ===========================
+           CARD (TAMBAHAN BIND)
+        =========================== */
+        .page-card {
+            background: #fff;
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,.08);
+            overflow: hidden;
+        }
+
+        /* ===========================
+           HEADER (TAMBAHAN BIND)
+        =========================== */
+        .page-header {
+            background: linear-gradient(90deg, #d90429, #ef233c);
+            color: white;
+            padding: 25px 30px;
+        }
+
+        .page-header h3 {
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .page-header p {
+            margin: 5px 0 0;
+            opacity: .9;
+        }
+
+        /* ===========================
+           TABLE (TAMBAHAN BIND)
+        =========================== */
+        .table-modern {
+            margin-bottom: 0;
+        }
+
+        .table-modern thead {
+            background: #f8f9fa;
+        }
+
+        .table-modern th {
+            border: none;
+            padding: 18px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .table-modern td {
+            padding: 18px;
+            vertical-align: middle;
+        }
+
+        .table-modern tbody tr {
+            transition: .25s;
+        }
+
+        .table-modern tbody tr:hover {
+            background: #fff5f5;
+            transform: scale(1.003);
+        }
+
+        /* ===========================
+           BUTTON (TAMBAHAN BIND)
+        =========================== */
+        .btn-action {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+        }
     </style>
-
 </head>
 
 <body>
 
     <div class="sidebar">
-
         <div class="logo">
-
-            <img src="~/images/logo.png" alt="Logo" />
-
+            <img src="~/images/logo.png" class="img-fluid" alt="Logo" onerror="this.src='https://placehold.co/90x90?text=Logo'" />
             <h5>ABSENSI GURU</h5>
-
             <small>SDN Emo Kurniaatmaja</small>
-
+            <div class="mt-3">
+                <span class="badge bg-light text-danger">
+                    Administrator
+                </span>
+            </div>
         </div>
 
         <div class="menu">
-
             <a asp-controller="Admin" asp-action="Dashboard">
-                <i class="bi bi-speedometer2"></i>
-                Dashboard
+                <i class="bi bi-speedometer2"></i> Dashboard
             </a>
-
             <a asp-controller="DataGuru" asp-action="Index">
-                <i class="bi bi-people-fill"></i>
-                Data Guru
+                <i class="bi bi-people-fill"></i> Data Guru
             </a>
-
             <a asp-controller="DataUser" asp-action="Index">
-                <i class="bi bi-person-circle"></i>
-                Data User
+                <i class="bi bi-person-circle"></i> Data User
             </a>
-
             <a asp-controller="DataAbsensi" asp-action="Index">
-                <i class="bi bi-calendar-check-fill"></i>
-                Data Absensi
+                <i class="bi bi-calendar-check-fill"></i> Data Absensi
             </a>
-
             <a asp-controller="DataIzin" asp-action="Index">
-                <i class="bi bi-file-earmark-text-fill"></i>
-                Data Izin
+                <i class="bi bi-file-earmark-text-fill"></i> Data Izin
+            </a>
+            <a asp-controller="Laporan" asp-action="Index">
+                <i class="bi bi-bar-chart-fill"></i> Laporan
             </a>
 
-            <a asp-controller="Laporan" asp-action="Index">
-                <i class="bi bi-bar-chart-fill"></i>
-                Laporan
+            <hr class="text-white"/>
+
+            <a asp-controller="Admin" asp-action="AbsensiSaya">
+                <i class="bi bi-fingerprint"></i> Absen Saya
+            </a>
+            <a asp-controller="Admin" asp-action="RiwayatSaya">
+                <i class="bi bi-clock-history"></i> Riwayat Absensi
+            </a>
+            <a asp-controller="Admin" asp-action="ProfilSaya">
+                <i class="bi bi-person-badge-fill"></i> Profil Saya
             </a>
 
             <hr class="text-white"/>
 
             <a asp-controller="Login" asp-action="Logout">
-                <i class="bi bi-box-arrow-right"></i>
-                Logout
+                <i class="bi bi-box-arrow-right"></i> Logout
             </a>
-
         </div>
-
     </div>
 
     <div class="content">
-
+        <!-- TOPBAR -->
         <div class="topbar">
-
             <div>
-                <h4 class="mb-0 text-danger fw-bold">
+                <h3 class="fw-bold text-danger mb-0">
                     @ViewData["Title"]
-                </h4>
+                </h3>
+                <small class="text-muted">
+                    Selamat datang di Sistem Absensi Guru
+                </small>
             </div>
 
-            <div>
-
-                <i class="bi bi-person-circle"></i>
-
-                <strong>
-                    @(Context.Session.GetString("NamaGuru") ??
-                      Context.Session.GetString("Username"))
-                </strong>
-
+            <div class="d-flex align-items-center">
+                <div class="text-end me-3">
+                    <div class="fw-bold">
+                        @(Context.Session.GetString("NamaGuru") ?? Context.Session.GetString("Username"))
+                    </div>
+                    <small class="text-muted">
+                        Administrator
+                    </small>
+                </div>
+                <img src="~/images/user.png.jpeg"
+                     width="45"
+                     height="45"
+                     class="rounded-circle border border-2 border-danger" 
+                     alt="User Profile"
+                     onerror="this.src='https://ui-avatars.com/api/?name=Admin&background=dc3545&color=fff'" />
             </div>
-
         </div>
 
         <div class="main-content">
-
             @RenderBody()
-
         </div>
-
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Script Auto Active Menu -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const currentUrl = window.location.pathname;
+            const menuLinks = document.querySelectorAll(".sidebar .menu a");
+            
+            menuLinks.forEach(link => {
+                const href = link.getAttribute("href");
+                if (href && currentUrl.toLowerCase().startsWith(href.toLowerCase()) && href !== "/") {
+                    link.classList.add("active");
+                }
+            });
+        });
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
-
 </body>
-
 </html>

@@ -46,8 +46,10 @@ namespace Absensiguru.Controllers
         [HttpPost]
         public IActionResult Index(string username, string password)
         {
+            // Menambahkan ThenInclude untuk memuat data Jabatan dari Guru
             var user = _context.Users
                                .Include(u => u.IdGuruNavigation)
+                                   .ThenInclude(g => g.IdJabatanNavigation)
                                .FirstOrDefault(u =>
                                     u.Username == username &&
                                     u.Password == password);
@@ -64,12 +66,31 @@ namespace Absensiguru.Controllers
 
             HttpContext.Session.SetInt32("IdUser", user.IdUser);
             HttpContext.Session.SetString("Username", user.Username);
-            HttpContext.Session.SetString("Role", user.Role);
 
-            if (user.IdGuruNavigation != null)
+            if (user.IdGuru != null)
             {
-                HttpContext.Session.SetInt32("IdGuru", user.IdGuruNavigation.IdGuru);
-                HttpContext.Session.SetString("NamaGuru", user.IdGuruNavigation.NamaGuru);
+                HttpContext.Session.SetInt32("IdGuru", user.IdGuru.Value);
+                HttpContext.Session.SetString(
+                    "NamaGuru",
+                    user.IdGuruNavigation?.NamaGuru ?? ""
+                );
+                HttpContext.Session.SetString(
+                    "Role",
+                    user.Role
+                );
+                HttpContext.Session.SetString(
+                    "Foto",
+                    user.IdGuruNavigation?.Foto ?? ""
+                );
+                HttpContext.Session.SetString(
+                    "Jabatan",
+                    user.IdGuruNavigation?.IdJabatanNavigation?.NamaJabatan ?? "-"
+                );
+            }
+            else
+            {
+                // Fallback jika user login bukan entitas Guru (misal Admin murni tanpa data Guru)
+                HttpContext.Session.SetString("Role", user.Role);
             }
 
             // ==========================

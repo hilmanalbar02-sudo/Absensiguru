@@ -3,118 +3,361 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Absensi Guru </title>
+    <!-- 1. Perubahan Judul Halaman -->
+    <title>@ViewData["Title"] | SIMAGU</title>
 
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link text="text/css" rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
     <style>
-        body {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            background-color: #f8f9fa;
+        body{
+            min-height:100vh;
+            display:flex;
+            flex-direction:column;
+            background:#f3f6fb;
+            font-family:'Segoe UI',sans-serif;
         }
 
-        main {
-            flex: 1;
+        main{
+            flex:1;
         }
 
-        .navbar-custom {
-            background: linear-gradient(90deg, #8B0000, #ff0000);
-            box-shadow: 0 3px 10px rgba(0,0,0,.2);
+        /* ========================= NAVBAR ========================= */
+        .navbar-custom{
+            background:linear-gradient(90deg,#b71c1c,#d32f2f,#ef5350);
+            box-shadow:0 4px 18px rgba(0,0,0,.15);
         }
 
-        .navbar-brand {
-            color: white !important;
-            font-size: 23px;
-            font-weight: bold;
+        .navbar-brand{
+            color:white!important;
+            font-size:23px;
+            font-weight:700;
         }
 
-        .nav-link {
-            color: white !important;
-            font-weight: 600;
-            margin-left: 15px;
+        .navbar-brand i{
+            font-size:28px;
+            margin-right:8px;
         }
 
-        .nav-link:hover {
-            color: #ffe0e0 !important;
+        .nav-link{
+            color:white!important;
+            font-weight:600;
+            margin-left:8px;
+            border-radius:10px;
+            padding:8px 14px;
+            transition:.3s;
         }
 
-        footer {
-            background: #8B0000;
-            color: white;
-            padding: 15px;
-            text-align: center;
+        .nav-link:hover{
+            background:rgba(255,255,255,.18);
+        }
+
+        .nav-link.active{
+            background:white;
+            color:#b71c1c!important;
+        }
+
+        /* ========================= USER ========================= */
+        .user-avatar{
+            width:40px;
+            height:40px;
+            border-radius:50%;
+            background:white;
+            color:#c62828;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:20px;
+            margin-right:8px;
+        }
+
+        .dropdown-menu{
+            border:none;
+            border-radius:15px;
+            box-shadow:0 10px 25px rgba(0,0,0,.15);
+        }
+
+        .dropdown-item{
+            padding:10px 18px;
+        }
+
+        .dropdown-item:hover{
+            background:#f5f5f5;
+        }
+
+        .dropdown-item i{
+            width:22px;
+            color:#c62828;
+        }
+
+        .dropdown-divider{
+            margin:6px 0;
+        }
+
+        /* ========================= CONTENT ========================= */
+        .page-container{
+            background:white;
+            border-radius:20px;
+            padding:25px;
+            box-shadow:0 5px 20px rgba(0,0,0,.08);
+            margin-top:25px;
+            margin-bottom:25px;
+        }
+
+        /* ========================= FOOTER ========================= */
+        footer{
+            background:#b71c1c;
+            color:white;
+            padding:25px 18px;
+            margin-top:auto;
+        }
+
+        footer hr {
+            border-color: rgba(255, 255, 255, 0.2);
+            margin: 15px 0;
+        }
+
+        /* ===========================
+           CARD (TAMBAHAN)
+        =========================== */
+        .page-card{
+            background:#fff;
+            border:none;
+            border-radius:20px;
+            box-shadow:0 10px 25px rgba(0,0,0,.08);
+            overflow:hidden;
+        }
+
+        /* ===========================
+           HEADER (TAMBAHAN)
+        =========================== */
+        .page-header{
+            background:linear-gradient(90deg,#d90429,#ef233c);
+            color:white;
+            padding:25px 30px;
+        }
+
+        .page-header h3{
+            margin:0;
+            font-weight:700;
+        }
+
+        .page-header p{
+            margin:5px 0 0;
+            opacity:.9;
+        }
+
+        /* ===========================
+           TABLE (TAMBAHAN)
+        =========================== */
+        .table-modern{
+            margin-bottom:0;
+        }
+
+        .table-modern thead{
+            background:#f8f9fa;
+        }
+
+        .table-modern th{
+            border:none;
+            padding:18px;
+            font-weight:600;
+            color:#555;
+        }
+
+        .table-modern td{
+            padding:18px;
+            vertical-align:middle;
+        }
+
+        .table-modern tbody tr{
+            transition:.25s;
+        }
+
+        .table-modern tbody tr:hover{
+            background:#fff5f5;
+            transform:scale(1.003);
+        }
+
+        /* ===========================
+           BUTTON (TAMBAHAN)
+        =========================== */
+        .btn-action{
+            width:38px;
+            height:38px;
+            border-radius:12px;
         }
     </style>
-
 </head>
-
 <body>
 
 <header>
-    <nav class="navbar navbar-expand-lg navbar-custom">
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
         <div class="container">
-
-            <a class="navbar-brand" href="/">
-                SDN EMO KURNIAATMAJA
+            <!-- 2. Perubahan Tampilan Brand Navbar -->
+            <a class="navbar-brand d-flex align-items-center"
+               asp-controller="Login"
+               asp-action="Index">
+                <i class="bi bi-mortarboard-fill me-2"></i>
+                <div class="d-flex flex-column lh-1">
+                    <span class="fw-bold fs-5">SIMAGU</span>
+                    <small style="font-size:11px; opacity: 0.85; font-weight: 400;">
+                        Sistem Informasi Manajemen Absensi Guru
+                    </small>
+                </div>
             </a>
-
             <button class="navbar-toggler"
-                    type="button"
                     data-bs-toggle="collapse"
                     data-bs-target="#menu">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-
             <div class="collapse navbar-collapse" id="menu">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
 
-                <ul class="navbar-nav ms-auto">
+                    @if(Context.Session.GetString("Role") == "Guru")
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               asp-controller="Guru"
+                               asp-action="Dashboard">
+                                <i class="bi bi-house-door-fill"></i>
+                                Dashboard
+                            </a>
+                        </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">
-                            Dashboard
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               asp-controller="Guru"
+                               asp-action="Riwayat">
+                                <i class="bi bi-calendar-check-fill"></i>
+                                Riwayat
+                            </a>
+                        </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="/Guru">
-                            Data Guru
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               asp-controller="Guru"
+                               asp-action="PengajuanIzin">
+                                <i class="bi bi-file-earmark-medical-fill"></i>
+                                Pengajuan Izin
+                            </a>
+                        </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="/Absensi">
-                            Absensi
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               asp-controller="Guru"
+                               asp-action="RiwayatIzin">
+                                <i class="bi bi-clock-history"></i>
+                                Riwayat Izin
+                            </a>
+                        </li>
+                    }
+                    else if(Context.Session.GetString("Role") == "Admin")
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               asp-controller="Admin"
+                               asp-action="Dashboard">
+                                <i class="bi bi-speedometer2"></i>
+                                Dashboard
+                            </a>
+                        </li>
 
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               asp-controller="Admin"
+                               asp-action="Guru">
+                                <i class="bi bi-people-fill"></i>
+                                Data Guru
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               asp-controller="Admin"
+                               asp-action="Absensi">
+                                <i class="bi bi-calendar-check-fill"></i>
+                                Absensi
+                            </a>
+                        </li>
+                    }
+
+                    @if(Context.Session.GetString("Role") != null)
+                    {
+                        <li class="nav-item dropdown ms-lg-3">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center"
+                               href="#"
+                               data-bs-toggle="dropdown">
+                                <div class="user-avatar">
+                                    <i class="bi bi-person-fill"></i>
+                                </div>
+                                <div class="text-start">
+                                    <div style="font-size:13px;">
+                                        @Context.Session.GetString("Role")
+                                    </div>
+                                    <strong>
+                                        @Context.Session.GetString("NamaGuru")
+                                    </strong>
+                                </div>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item"
+                                       asp-controller="Guru"
+                                       asp-action="Profil">
+                                        <i class="bi bi-person-circle"></i>
+                                        Profil Saya
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item"
+                                       asp-controller="Guru"
+                                       asp-action="Password">
+                                        <i class="bi bi-key-fill"></i>
+                                        Ubah Password
+                                    </a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <a class="dropdown-item text-danger"
+                                       asp-controller="Login"
+                                       asp-action="Logout">
+                                        <i class="bi bi-box-arrow-right"></i>
+                                        Logout
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
                 </ul>
-
             </div>
-
         </div>
     </nav>
 </header>
 
-
-<main class="container mt-4">
-
-    @RenderBody()
-
+<main class="container">
+    <div class="page-container">
+        @RenderBody()
+    </div>
 </main>
 
-
+<!-- 3. Perubahan Desain Footer Modern -->
 <footer>
-
-    <div class="container">
-        © 2026 Sistem Absensi Guru
+    <div class="container text-center">
+        <h5 class="fw-bold mb-1">SIMAGU</h5>
+        <div class="opacity-75">Sistem Informasi Manajemen Absensi Guru</div>
+        <div class="mt-2 small fw-semibold">SDN Emo Kurniaatmaja</div>
+        <hr>
+        <small class="opacity-50">© 2026 SIMAGU. All Rights Reserved.</small>
     </div>
-
 </footer>
-
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

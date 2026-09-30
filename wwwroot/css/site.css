@@ -29,3 +29,65 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+
+/* ===========================
+   Dashboard Guru
+=========================== */
+
+.dashboard-header{
+    background: linear-gradient(135deg,#dc3545,#ff6b6b);
+    color:white;
+    border-radius:20px;
+    padding:30px;
+    box-shadow:0 10px 30px rgba(0,0,0,.15);
+}
+
+.dashboard-card{
+    border:none;
+    border-radius:20px;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.dashboard-card:hover{
+    transform:translateY(-5px);
+}
+
+.icon-circle{
+    width:70px;
+    height:70px;
+    background:#fff;
+    color:#dc3545;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:32px;
+}
+
+.status-hadir{
+    color:#198754;
+    font-weight:bold;
+}
+
+.status-belum{
+    color:#ffc107;
+    font-weight:bold;
+}
+
+.info-title{
+    font-size:14px;
+    color:#888;
+}
+
+.info-value{
+    font-size:18px;
+    font-weight:600;
+}
+
+.btn-absen{
+    border-radius:15px;
+    padding:15px;
+    font-size:20px;
+}

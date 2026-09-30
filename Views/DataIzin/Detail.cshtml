@@ -1,0 +1,188 @@
+@model Absensiguru.Models.Izin
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Detail Pengajuan Izin";
+}
+
+<div class="card shadow border-0 rounded-4">
+
+    <div class="card-header bg-danger text-white">
+
+        <h3 class="mb-0">
+            Detail Pengajuan Izin
+        </h3>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="row">
+
+            <div class="col-lg-4 text-center">
+
+                @if (!string.IsNullOrEmpty(Model.IdGuruNavigation.Foto))
+                {
+                    <img src="~/uploads/guru/@Model.IdGuruNavigation.Foto"
+                         class="rounded-circle shadow mb-3"
+                         style="width:200px;height:200px;object-fit:cover;" />
+                }
+                else
+                {
+                    <img src="~/images/user.png"
+                         class="rounded-circle shadow mb-3"
+                         style="width:200px;height:200px;object-fit:cover;" />
+                }
+
+                <h4 class="fw-bold">
+                    @Model.IdGuruNavigation.NamaGuru
+                </h4>
+
+                <p class="text-muted">
+                    @Model.IdGuruNavigation.IdJabatanNavigation.NamaJabatan
+                </p>
+
+            </div>
+
+            <div class="col-lg-8">
+
+                <table class="table table-bordered">
+
+                    <tr>
+                        <th width="180">NIP</th>
+                        <td>@Model.IdGuruNavigation.Nip</td>
+                    </tr>
+
+                    <tr>
+                        <th>Tanggal</th>
+                        <td>@Model.Tanggal</td>
+                    </tr>
+
+                    <tr>
+                        <th>Jenis Izin</th>
+                        <td>@Model.JenisIzin</td>
+                    </tr>
+
+                    <tr>
+                        <th>Status</th>
+
+                        <td>
+
+                            @if(Model.Status=="Menunggu")
+                            {
+                                <span class="badge bg-warning fs-6">
+                                    Menunggu
+                                </span>
+                            }
+                            else if(Model.Status=="Disetujui")
+                            {
+                                <span class="badge bg-success fs-6">
+                                    Disetujui
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger fs-6">
+                                    Ditolak
+                                </span>
+                            }
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <th>Alasan</th>
+                        <td>@Model.Alasan</td>
+                    </tr>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        <hr />
+
+        <h5 class="fw-bold mb-3">
+            Surat Keterangan
+        </h5>
+
+        @if (!string.IsNullOrEmpty(Model.Bukti))
+        {
+            <iframe src="~/uploads/izin/@Model.Bukti"
+                    width="100%"
+                    height="700"
+                    style="border:1px solid #ddd;border-radius:10px;">
+            </iframe>
+
+            <br /><br />
+
+            <a href="~/uploads/izin/@Model.Bukti"
+               target="_blank"
+               class="btn btn-primary">
+
+                <i class="bi bi-file-earmark-pdf-fill"></i>
+
+                Buka PDF
+
+            </a>
+
+            <a href="~/uploads/izin/@Model.Bukti"
+               download
+               class="btn btn-success">
+
+                <i class="bi bi-download"></i>
+
+                Download
+
+            </a>
+        }
+        else
+        {
+            <div class="alert alert-warning">
+                Surat izin belum diupload.
+            </div>
+        }
+
+        <hr />
+
+        <div class="text-end">
+
+            <a asp-action="Index"
+               class="btn btn-secondary">
+
+                <i class="bi bi-arrow-left"></i>
+
+                Kembali
+
+            </a>
+
+            @if(Model.Status=="Menunggu")
+            {
+                <a asp-action="Setujui"
+                   asp-route-id="@Model.IdIzin"
+                   class="btn btn-success">
+
+                    <i class="bi bi-check-circle-fill"></i>
+
+                    Setujui
+
+                </a>
+
+                <a asp-action="Tolak"
+                   asp-route-id="@Model.IdIzin"
+                   class="btn btn-danger">
+
+                    <i class="bi bi-x-circle-fill"></i>
+
+                    Tolak
+
+                </a>
+            }
+
+        </div>
+
+    </div>
+
+</div>

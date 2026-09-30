@@ -5,124 +5,88 @@
 }
 
 <div class="container py-4">
-
-    <div class="card shadow border-0 rounded-4">
-
-        <div class="card-header bg-warning text-dark">
-
-            <h3 class="mb-0 fw-bold">
+    <div class="card shadow border-0 rounded-4 overflow-hidden">
+        
+        <!-- HEADER UTAMA -->
+        <div class="card-header bg-warning text-dark py-3">
+            <h4 class="mb-0 fw-bold d-flex align-items-center">
+                <i class="bi bi-pencil-square me-2"></i>
                 Edit Data User
-            </h3>
-
+            </h4>
         </div>
 
-        <div class="card-body">
-
+        <div class="card-body p-4">
             <form asp-action="Edit" method="post">
-
                 <input type="hidden" asp-for="IdUser" />
 
+                <!-- INPUT GURU -->
                 <div class="mb-3">
-
-                    <label class="form-label fw-bold">
-                        Guru
-                    </label>
-
-                    <select asp-for="IdGuru" class="form-select">
-
-                        <option value="">
-                            -- Pilih Guru --
-                        </option>
-
-                        @foreach (var guru in ViewBag.Guru)
-                        {
-                            <option value="@guru.IdGuru">
-                                @guru.NamaGuru
-                            </option>
-                        }
-
-                    </select>
-
+                    <label class="form-label fw-bold text-secondary">Guru Terkait</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light text-muted"><i class="bi bi-person-fill"></i></span>
+                        <select asp-for="IdGuru" class="form-select" style="border-radius: 0 10px 10px 0;">
+                            <option value="">-- Pilih Guru --</option>
+                            @if (ViewBag.Guru != null)
+                            {
+                                foreach (var guru in ViewBag.Guru)
+                                {
+                                    <option value="@guru.IdGuru">@guru.NamaGuru</option>
+                                }
+                            }
+                        </select>
+                    </div>
                 </div>
 
+                <!-- INPUT USERNAME -->
                 <div class="mb-3">
-
-                    <label class="form-label fw-bold">
-                        Username
-                    </label>
-
-                    <input asp-for="Username"
-                           class="form-control" />
-
-                    <span asp-validation-for="Username"
-                          class="text-danger"></span>
-
+                    <label class="form-label fw-bold text-secondary">Username</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light text-muted"><i class="bi bi-at"></i></span>
+                        <input asp-for="Username" class="form-control" style="border-radius: 0 10px 10px 0;" placeholder="Masukkan username baru..." />
+                    </div>
+                    <span asp-validation-for="Username" class="text-danger small mt-1 d-block"></span>
                 </div>
 
+                <!-- INPUT PASSWORD -->
                 <div class="mb-3">
-
-                    <label class="form-label fw-bold">
-                        Password
-                    </label>
-
-                    <input asp-for="Password"
-                           type="password"
-                           class="form-control" />
-
-                    <span asp-validation-for="Password"
-                          class="text-danger"></span>
-
+                    <label class="form-label fw-bold text-secondary">Password Baru <span class="text-muted fw-normal small">(Isi jika ingin diubah)</span></label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light text-muted"><i class="bi bi-key-fill"></i></span>
+                        <input asp-for="Password" type="password" class="form-control" style="border-radius: 0 10px 10px 0;" placeholder="••••••••" />
+                    </div>
+                    <span asp-validation-for="Password" class="text-danger small mt-1 d-block"></span>
                 </div>
 
-                <div class="mb-3">
-
-                    <label class="form-label fw-bold">
-                        Role
-                    </label>
-
-                    <select asp-for="Role"
-                            class="form-select">
-
-                        <option value="Admin">Admin</option>
-                        <option value="TU">TU</option>
-                        <option value="Guru">Guru</option>
-
-                    </select>
-
+                <!-- INPUT ROLE -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold text-secondary">Hak Akses / Peran</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light text-muted"><i class="bi bi-shield-lock-fill"></i></span>
+                        <select asp-for="Role" class="form-select" style="border-radius: 0 10px 10px 0;">
+                            <option value="Admin">Admin</option>
+                            <option value="TU">TU</option>
+                            <option value="Guru">Guru</option>
+                        </select>
+                    </div>
                 </div>
 
-                <hr />
+                <hr class="text-muted opacity-25 my-4" />
 
-                <div class="d-flex justify-content-between">
-
-                    <a asp-action="Index"
-                       class="btn btn-secondary rounded-pill px-4">
-
-                        ← Kembali
-
+                <!-- AKSI FOOTER -->
+                <div class="d-flex justify-content-between align-items-center">
+                    <a asp-action="Index" class="btn btn-outline-secondary px-4 py-2" style="border-radius: 10px; font-weight: 500;">
+                        <i class="bi bi-arrow-left me-2"></i> Kembali
                     </a>
-
-                    <button type="submit"
-                            class="btn btn-warning rounded-pill px-4">
-
-                        💾 Update User
-
+                    
+                    <button type="submit" class="btn btn-warning px-4 py-2 text-dark" style="border-radius: 10px; font-weight: 500;">
+                        <i class="bi bi-cloud-arrow-up-fill me-2"></i> Update User
                     </button>
-
                 </div>
-
             </form>
-
         </div>
-
     </div>
-
 </div>
 
-@section Scripts{
-
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }

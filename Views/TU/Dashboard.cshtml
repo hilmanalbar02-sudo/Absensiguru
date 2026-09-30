@@ -1,13 +1,399 @@
+@model dynamic 
+
 @{
-    ViewData["Title"] = "Dashboard TU";
+    Layout = "~/Views/Shared/_TULayout.cshtml";
+    ViewData["Title"] = "Dashboard";
+
+    // Casting data Tuple untuk Monitoring Realtime
+    var monitoringList = ViewBag.AbsensiHariIni as List<Tuple<Absensiguru.Models.Guru, Absensiguru.Models.Absensi, Absensiguru.Models.Izin>>;
+    
+    // Casting data untuk Izin Terbaru
+    var izinTerbaru = ViewBag.IzinTerbaru as List<Absensiguru.Models.Izin>;
+
+    // Hitung persentase kehadiran untuk Progress Bar
+    int totalGuru = ViewBag.TotalGuru ?? 0;
+    int hadir = ViewBag.Hadir ?? 0;
+    int percentHadir = totalGuru > 0 ? (hadir * 100) / totalGuru : 0;
 }
 
-<div class="container py-5">
+<style>
+    /* --- CSS UTAMA DASHBOARD --- */
+    .dashboard-title {
+        font-size: 28px;
+        font-weight: 700;
+        color: #1e293b;
+    }
+    
+    .dashboard-subtitle {
+        color: #64748b;
+        font-size: 14px;
+        margin-top: 4px;
+    }
 
-    <div class="alert alert-warning">
+    /* Grid 4 Kolom Atas */
+    .card-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 24px;
+        margin-top: 25px;
+    }
 
-        <h2>Selamat Datang TU</h2>
+    .card-dash {
+        border: none;
+        border-radius: 28px;
+        padding: 30px 24px 24px 24px;
+        color: white;
+        position: relative;
+        box-shadow: 0 10px 25px rgba(0,0,0,.08);
+        transition: transform .3s ease, box-shadow .3s ease;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 290px;
+    }
 
+    .card-dash:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(0,0,0,.15);
+    }
+
+    .card-blue { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+    .card-green { background: linear-gradient(135deg, #10b981, #059669); }
+    .card-yellow { background: linear-gradient(135deg, #f59e0b, #d97706); }
+    .card-orange { background: linear-gradient(135deg, #f97316, #ea580c); }
+
+    .card-dash .card-label { font-size: 12px; font-weight: 700; text-transform: uppercase; opacity: 0.8; }
+    .card-dash .card-icon { font-size: 32px; position: absolute; top: 25px; right: 25px; opacity: 0.6; }
+    .card-dash .card-value { font-size: 56px; font-weight: 700; margin: 15px 0 5px 0; line-height: 1; }
+
+    .card-dash .card-badge {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 4px 12px;
+        border-radius: 30px;
+        font-size: 11px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        width: fit-content;
+        margin-bottom: 20px;
+    }
+
+    .card-dash .card-progress-text { font-size: 12px; opacity: 0.9; margin-bottom: 25px; }
+    .card-mini-progress { height: 6px; background: rgba(255,255,255,0.2); border-radius: 10px; margin-bottom: 10px; overflow: hidden; }
+    .card-mini-progress-bar { height: 100%; background: white; border-radius: 10px; }
+
+    .btn-card-action {
+        background: white;
+        border: none;
+        border-radius: 30px;
+        padding: 10px 20px;
+        font-size: 13px;
+        font-weight: 600;
+        text-align: center;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+    .card-blue .btn-card-action { color: #2563eb; }
+    .card-green .btn-card-action { color: #059669; }
+    .card-yellow .btn-card-action { color: #d97706; }
+    .card-orange .btn-card-action { color: #ea580c; }
+
+    /* --- CSS TAMPILAN BAWAH --- */
+    .quick-nav-container {
+        display: flex;
+        gap: 12px;
+        margin-top: 35px;
+        margin-bottom: 25px;
+    }
+
+    .btn-quick {
+        border: none;
+        border-radius: 16px;
+        padding: 12px 24px;
+        color: white;
+        font-weight: 600;
+        font-size: 14px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        text-decoration: none;
+        transition: opacity 0.2s;
+    }
+    .btn-quick:hover { color: white; opacity: 0.9; }
+    .btn-q-blue { background-color: #0066ff; }
+    .btn-q-green { background-color: #009966; }
+    .btn-q-yellow { background-color: #ffbb00; color: #333; }
+    .btn-q-yellow:hover { color: #333; }
+    .btn-q-red { background-color: #dc3545; }
+
+    /* Layout Dua Kolom Bawah */
+    .bottom-layout {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 30px;
+    }
+
+    .panel-card {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        border: none;
+    }
+
+    .panel-header-red { background-color: #dc3545; color: white; padding: 18px 24px; font-weight: 700; font-size: 18px; display: flex; align-items: center; gap: 10px; }
+    .panel-header-yellow { background-color: #ffcc00; color: #1e293b; padding: 18px 24px; font-weight: 700; font-size: 18px; display: flex; align-items: center; gap: 10px; }
+
+    .panel-body { padding: 24px; }
+
+    /* List Izin Terbaru Scrollable */
+    .scrollable-list {
+        max-height: 400px;
+        overflow-y: auto;
+        padding-right: 5px;
+    }
+    
+    .scrollable-list::-webkit-scrollbar { width: 6px; }
+    .scrollable-list::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+    .scrollable-list::-webkit-scrollbar-thumb { background: #aaa; border-radius: 10px; }
+
+    .izin-item {
+        background: #f8fafc;
+        border-left: 5px solid #ffcc00;
+        border-radius: 14px;
+        padding: 16px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    }
+
+    .izin-nama { font-weight: 700; color: #1e293b; font-size: 15px; text-transform: uppercase; }
+    .izin-tgl { color: #64748b; font-size: 13px; margin: 4px 0 8px 0; display: flex; align-items: center; gap: 6px; }
+
+    .badge-jenis { background-color: #0066ff; color: white; font-size: 11px; padding: 4px 12px; border-radius: 6px; font-weight: 600; }
+    .badge-sakit { background-color: #dc3545; color: white; font-size: 11px; padding: 4px 12px; border-radius: 6px; font-weight: 600; }
+    
+    .badge-status-setuju { background-color: #10b981; color: white; font-size: 11px; padding: 4px 12px; border-radius: 6px; font-weight: 600; }
+    .badge-status-tolak { background-color: #ef4444; color: white; font-size: 11px; padding: 4px 12px; border-radius: 6px; font-weight: 600; }
+    .badge-status-pending { background-color: #64748b; color: white; font-size: 11px; padding: 4px 12px; border-radius: 6px; font-weight: 600; }
+</style>
+
+<!-- HEADER -->
+<div class="mb-2">
+    <h3 class="dashboard-title">Dashboard Administrator</h3>
+    <p class="dashboard-subtitle">Monitoring absensi guru SDN Emo Kurniaatmaja secara realtime.</p>
+</div>
+
+<!-- KARTU STATISTIK ATAS -->
+<div class="card-grid">
+    <!-- TOTAL GURU -->
+    <div class="card-dash card-blue">
+        <div>
+            <div class="card-label">Total Guru</div>
+            <i class="bi bi-people-fill card-icon"></i>
+            <div class="card-value">@ViewBag.TotalGuru</div>
+            <div class="card-badge"><i class="bi bi-check-circle-fill"></i> Data Aktif Sekolah</div>
+        </div>
+        <a asp-controller="DataGuru" asp-action="Index" class="btn-card-action"><i class="bi bi-person-fill-gear"></i> Kelola Guru</a>
+    </div>
+
+    <!-- HADIR HARI INI -->
+    <div class="card-dash card-green">
+        <div>
+            <div class="card-label">Hadir Hari Ini</div>
+            <i class="bi bi-person-check-fill card-icon"></i>
+            <div class="card-value">@ViewBag.Hadir</div>
+            <div class="card-mini-progress">
+                <div class="card-mini-progress-bar" style="width: @(percentHadir)%;"></div>
+            </div>
+            <div class="card-progress-text">@ViewBag.Hadir / @ViewBag.TotalGuru Guru (@percentHadir%)</div>
+        </div>
+        <a asp-controller="DataAbsensi" asp-action="Index" class="btn-card-action"><i class="bi bi-eye-fill"></i> Lihat Absensi</a>
+    </div>
+
+    <!-- IZIN / SAKIT -->
+    <div class="card-dash card-yellow">
+        <div>
+            <div class="card-label">Izin / Sakit</div>
+            <i class="bi bi-envelope-fill card-icon"></i>
+            <div class="card-value">@ViewBag.Izin</div>
+            <div class="card-badge"><i class="bi bi-file-text-fill"></i> Dengan Keterangan</div>
+        </div>
+        <a asp-controller="DataIzin" asp-action="Index" class="btn-card-action"><i class="bi bi-search"></i> Cek Keterangan</a>
+    </div>
+
+    <!-- ABSEN / ALPHA -->
+    <div class="card-dash card-orange">
+        <div>
+            <div class="card-label">Absen / Alpha</div>
+            <i class="bi bi-person-x-fill card-icon"></i>
+            <div class="card-value">@ViewBag.Alpha</div>
+            <div class="card-badge"><i class="bi bi-exclamation-triangle-fill"></i> Tanpa Keterangan</div>
+        </div>
+        <a asp-controller="Laporan" asp-action="Index" class="btn-card-action"><i class="bi bi-bell-fill"></i> Tindak Lanjuti</a>
+    </div>
+</div>
+
+<!-- TOMBOL NAVIGASI CEPAT -->
+<div class="quick-nav-container">
+    <a asp-controller="DataGuru" asp-action="Index" class="btn-quick btn-q-blue"><i class="bi bi-people-fill"></i> Data Guru</a>
+    <a asp-controller="DataAbsensi" asp-action="Index" class="btn-quick btn-q-green"><i class="bi bi-calendar-check"></i> Data Absensi</a>
+    <a asp-controller="DataIzin" asp-action="Index" class="btn-quick btn-q-yellow"><i class="bi bi-file-earmark-text"></i> Data Izin</a>
+    <a asp-controller="Laporan" asp-action="Index" class="btn-quick btn-q-red"><i class="bi bi-bar-chart-fill"></i> Laporan</a>
+</div>
+
+<!-- DUA KOLOM PANEL DATA BAWAH -->
+<div class="bottom-layout">
+    
+    <!-- KIRI: ABSENSI HARI INI (MONITORING REALTIME) -->
+    <div class="panel-card">
+        <div class="panel-header-red">
+            <i class="bi bi-calendar-check"></i> Absensi Hari Ini
+        </div>
+        <div class="panel-body">
+            @if (monitoringList == null || !monitoringList.Any())
+            {
+                <div class="alert alert-warning border-0 rounded-3 d-flex align-items-center gap-2" style="background-color: #fef3c7; color: #92400e;" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    <div>Belum ada data guru yang terdaftar dalam sistem.</div>
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle m-0">
+                        <thead>
+                            <tr class="table-light">
+                                <th width="60" class="text-center">No</th>
+                                <th>Nama Guru</th>
+                                <th class="text-center" width="130">Jam Masuk</th>
+                                <th class="text-center" width="130">Jam Pulang</th>
+                                <th class="text-center" width="120">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{ int index = 1; }
+                            @foreach (var item in monitoringList)
+                            {
+                                var guru = item.Item1;
+                                var absensi = item.Item2;
+                                var izin = item.Item3;
+
+                                <tr>
+                                    <td class="text-center fw-semibold text-secondary">@(index++)</td>
+                                    <td>
+                                        <div class="fw-bold text-dark">@guru.NamaGuru</div>
+                                        <div class="text-muted small" style="font-size: 11px;">NIP. @(guru.Nip ?? "-")</div>
+                                    </td>
+                                    <td class="text-center font-monospace text-secondary small">
+                                        @(absensi?.JamMasuk != null ? absensi.JamMasuk.Value.ToString(@"HH\:mm") : "-")
+                                    </td>
+                                    <td class="text-center font-monospace text-secondary small">
+                                        @(absensi?.JamPulang != null ? absensi.JamPulang.Value.ToString(@"HH\:mm") : "-")
+                                    </td>
+                                    <td class="text-center">
+                                        @if (absensi != null)
+                                        {
+                                            <span class="badge bg-success-subtle text-success px-2 py-1.5 rounded-2 w-100" style="font-size: 11px;">
+                                                Hadir
+                                            </span>
+                                        }
+                                        else if (izin != null)
+                                        {
+                                            <span class="badge bg-warning-subtle text-warning px-2 py-1.5 rounded-2 w-100" style="font-size: 11px;">
+                                                Izin
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger-subtle text-danger px-2 py-1.5 rounded-2 w-100" style="font-size: 11px;">
+                                                Alpha
+                                            </span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- KANAN: PENGAJUAN IZIN TERBARU (SCROLLABLE) -->
+    <div class="panel-card">
+        <div class="panel-header-yellow">
+            <i class="bi bi-file-earmark-text"></i> Pengajuan Izin Terbaru
+        </div>
+        <div class="panel-body">
+            <div class="scrollable-list">
+                @if (izinTerbaru == null || !izinTerbaru.Any())
+                {
+                    <div class="text-center text-muted py-4">
+                        <i class="bi bi-envelope-open fs-3 d-block mb-2"></i>
+                        Belum ada pengajuan izin terbaru.
+                    </div>
+                }
+                else
+                {
+                    @foreach (var item in izinTerbaru)
+                    {
+                        <div class="izin-item">
+                            <div class="izin-nama">@(item.IdGuruNavigation?.NamaGuru ?? "GURU")</div>
+                            <div class="izin-tgl">
+                                <i class="bi bi-calendar3"></i> @item.Tanggal.ToString("dd/MM/yyyy")
+                            </div>
+                            <div class="d-flex gap-1">
+                                @* Perbaikan Dinamis: Menggunakan Reflection agar aman dari error build *@
+                                @{
+                                    bool isSakit = false;
+                                    var propertiKeterangan = item.GetType().GetProperty("Keterangan") 
+                                                         ?? item.GetType().GetProperty("JenisIzin") 
+                                                         ?? item.GetType().GetProperty("Kategori") 
+                                                         ?? item.GetType().GetProperty("Alasan");
+                                    
+                                    if (propertiKeterangan != null)
+                                    {
+                                        var nilaiProperti = propertiKeterangan.GetValue(item)?.ToString();
+                                        if (nilaiProperti != null && nilaiProperti.Contains("Sakit", StringComparison.OrdinalIgnoreCase))
+                                        {
+                                            isSakit = true;
+                                        }
+                                    }
+                                }
+
+                                @if (isSakit)
+                                {
+                                    <span class="badge-sakit">Sakit</span>
+                                }
+                                else
+                                {
+                                    <span class="badge-jenis">Izin</span>
+                                }
+
+                                @* Menampilkan status pengajuan izin *@
+                                @if (item.Status == "Disetujui")
+                                {
+                                    <span class="badge-status-setuju">Disetujui</span>
+                                }
+                                else if (item.Status == "Ditolak")
+                                {
+                                    <span class="badge-status-tolak">Ditolak</span>
+                                }
+                                else
+                                {
+                                    <span class="badge-status-pending">Pending</span>
+                                }
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
     </div>
 
 </div>

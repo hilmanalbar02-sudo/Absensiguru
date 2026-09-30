@@ -21,6 +21,9 @@ public partial class Guru
 
     public string? Email { get; set; }
 
+    // Kolom baru untuk menyimpan nama file foto
+    public string? Foto { get; set; }
+
     public string? Status { get; set; }
 
     public int IdJabatan { get; set; }

@@ -2,157 +2,95 @@
 
 @{
     ViewData["Title"] = "Data Guru";
-
     int no = 1;
 }
 
-<div class="container-fluid py-4">
+<div class="container-fluid py-2">
 
     @if (TempData["Success"] != null)
     {
-        <div class="alert alert-success alert-dismissible fade show shadow-sm">
-
-            <i class="fa-solid fa-circle-check me-2"></i>
-
+        <div class="alert alert-success alert-dismissible fade show shadow-sm border-0 mb-4" style="border-radius: 15px;">
+            <i class="bi bi-check-circle-fill me-2"></i>
             @TempData["Success"]
-
-            <button type="button"
-                    class="btn-close"
-                    data-bs-dismiss="alert">
-            </button>
-
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     }
 
-    <div class="card shadow border-0 rounded-4">
-
-        <div class="card-header bg-danger text-white">
-
-            <div class="row align-items-center">
-
-                <div class="col-md-4">
-
-                    <h3 class="fw-bold mb-0">
-
-                        <i class="fa-solid fa-users me-2"></i>
-
+    <div class="card page-card border-0">
+        
+        <!-- HEADER UTAMA -->
+        <div class="page-header">
+            <div class="row align-items-center g-3">
+                <div class="col-xl-4 col-md-5">
+                    <h3>
+                        <i class="bi bi-people-fill me-2"></i>
                         Data Guru
-
                     </h3>
-
+                    <p>
+                        Kelola seluruh data guru SDN Emo Kurniaatmaja
+                    </p>
                 </div>
-
-                <div class="col-md-8">
-
-                    <form asp-action="Index"
-                          method="get">
-
-                        <div class="row g-2">
-
+                <div class="col-xl-8 col-md-7">
+                    <form asp-action="Index" method="get">
+                        <div class="row g-2 justify-content-md-end">
                             <div class="col-md-6">
-
-                                <input type="text"
-                                       name="searchString"
-                                       value="@ViewBag.Search"
-                                       class="form-control"
-                                       placeholder="Cari berdasarkan Nama atau NIP..." />
-
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-end-0 text-muted" style="border-radius: 12px 0 0 12px;">
+                                        <i class="bi bi-search"></i>
+                                    </span>
+                                    <input type="text"
+                                           name="searchString"
+                                           value="@ViewBag.Search"
+                                           class="form-control border-start-0 ps-0"
+                                           style="border-radius: 0 12px 12px 0;"
+                                           placeholder="Cari berdasarkan Nama atau NIP..." />
+                                </div>
                             </div>
-
                             <div class="col-auto">
-
-                                <button type="submit"
-                                        class="btn btn-light">
-
-                                    <i class="fa-solid fa-magnifying-glass"></i>
-
+                                <button type="submit" class="btn btn-light px-3" style="border-radius: 12px; height: 42px;">
                                     Cari
-
                                 </button>
-
                             </div>
-
                             <div class="col-auto">
-
-                                <a asp-action="Index"
-                                   class="btn btn-warning">
-
-                                    <i class="fa-solid fa-rotate"></i>
-
-                                    Refresh
-
+                                <a asp-action="Index" class="btn btn-warning text-dark px-3" style="border-radius: 12px; height: 42px; display: inline-flex; align-items: center;">
+                                    <i class="bi bi-arrow-clockwise me-1"></i> Refresh
                                 </a>
-
                             </div>
-
-                            <div class="col-auto ms-auto">
-
-                                <a asp-action="Create"
-                                   class="btn btn-success">
-
-                                    <i class="fa-solid fa-plus"></i>
-
-                                    Tambah Guru
-
+                            <div class="col-auto">
+                                <a asp-action="Create" class="btn btn-success px-3" style="border-radius: 12px; height: 42px; display: inline-flex; align-items: center;">
+                                    <i class="bi bi-plus-lg me-1"></i> Tambah Guru
                                 </a>
-
                             </div>
-
                         </div>
-
                     </form>
-
                 </div>
-
             </div>
-
         </div>
 
-        <div class="card-body">
-
+        <!-- AREA TABEL MODERN -->
+        <div class="card-body p-0">
             <div class="table-responsive">
-
-                <table class="table table-hover align-middle">
-
-                    <thead class="table-danger text-center">
-
+                <table class="table table-modern align-middle mb-0">
+                    <thead>
                         <tr>
-
-                            <th width="60">No</th>
-
+                            <th width="70" class="text-center">No</th>
                             <th>NIP</th>
-
                             <th>Nama Guru</th>
-
                             <th>Jenis Kelamin</th>
-
                             <th>Jabatan</th>
-
-                            <th>Status</th>
-
-                            <th width="230">Aksi</th>
-
+                            <th class="text-center">Status</th>
+                            <th width="180" class="text-center">Aksi</th>
                         </tr>
-
                     </thead>
-
                     <tbody>
-
                         @if (!Model.Any())
                         {
                             <tr>
-
-                                <td colspan="7"
-                                    class="text-center text-muted py-4">
-
-                                    <i class="fa-solid fa-folder-open fa-2x mb-2"></i>
-
+                                <td colspan="7" class="text-center text-muted py-5">
+                                    <i class="bi bi-folder-x" style="font-size: 2.5rem; color: #ccc;"></i>
                                     <br />
-
-                                    Data guru tidak ditemukan.
-
+                                    <span class="d-block mt-2">Data guru tidak ditemukan.</span>
                                 </td>
-
                             </tr>
                         }
                         else
@@ -160,123 +98,73 @@
                             @foreach (var guru in Model)
                             {
                                 <tr>
-
+                                    <td class="text-center text-muted fw-medium">@no</td>
+                                    <td>@guru.Nip</td>
+                                    <td class="fw-semibold text-dark">@guru.NamaGuru</td>
+                                    <td>
+                                        @(guru.JenisKelamin == "L" ? "Laki-laki" : "Perempuan")
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-light text-secondary border px-2 py-1">
+                                            @guru.IdJabatanNavigation?.NamaJabatan
+                                        </span>
+                                    </td>
                                     <td class="text-center">
-
-                                        @no
-
-                                    </td>
-
-                                    <td>
-
-                                        @guru.Nip
-
-                                    </td>
-
-                                    <td class="fw-semibold">
-
-                                        @guru.NamaGuru
-
-                                    </td>
-
-                                    <td>
-
-                                        @(guru.JenisKelamin == "L"
-                                            ? "Laki-laki"
-                                            : "Perempuan")
-
-                                    </td>
-
-                                    <td>
-
-                                        @guru.IdJabatanNavigation.NamaJabatan
-
-                                    </td>
-
-                                    <td class="text-center">
-
                                         @if (guru.Status == "Aktif")
                                         {
-                                            <span class="badge rounded-pill bg-success px-3">
-
+                                            <span class="badge rounded-pill bg-success-subtle text-success px-3 py-2 border border-success-subtle">
                                                 Aktif
-
                                             </span>
                                         }
                                         else
                                         {
-                                            <span class="badge rounded-pill bg-danger px-3">
-
+                                            <span class="badge rounded-pill bg-danger-subtle text-danger px-3 py-2 border border-danger-subtle">
                                                 Nonaktif
-
                                             </span>
                                         }
-
                                     </td>
-
                                     <td class="text-center">
-
-                                        <a asp-action="Details"
-                                           asp-route-id="@guru.IdGuru"
-                                           class="btn btn-primary btn-sm">
-
-                                            <i class="fa-solid fa-eye"></i>
-
-                                        </a>
-
-                                        <a asp-action="Edit"
-                                           asp-route-id="@guru.IdGuru"
-                                           class="btn btn-warning btn-sm text-white">
-
-                                            <i class="fa-solid fa-pen"></i>
-
-                                        </a>
-
-                                        <a asp-action="Delete"
-                                           asp-route-id="@guru.IdGuru"
-                                           class="btn btn-danger btn-sm">
-
-                                            <i class="fa-solid fa-trash"></i>
-
-                                        </a>
-
+                                        <div class="d-inline-flex justify-content-center align-items-center">
+                                            <a asp-action="Details"
+                                               asp-route-id="@guru.IdGuru"
+                                               class="btn btn-primary btn-action"
+                                               title="Detail">
+                                                <i class="bi bi-eye-fill"></i>
+                                            </a>
+                                            <a asp-action="Edit"
+                                               asp-route-id="@guru.IdGuru"
+                                               class="btn btn-warning text-white btn-action"
+                                               title="Edit">
+                                                <i class="bi bi-pencil-fill"></i>
+                                            </a>
+                                            <a asp-action="Delete"
+                                               asp-route-id="@guru.IdGuru"
+                                               class="btn btn-danger btn-action"
+                                               title="Hapus">
+                                                <i class="bi bi-trash-fill"></i>
+                                            </a>
+                                        </div>
                                     </td>
-
                                 </tr>
-
                                 no++;
                             }
                         }
-
                     </tbody>
-
                 </table>
-
             </div>
-
         </div>
 
-        <div class="card-footer bg-white">
-
-            <div class="d-flex justify-content-between align-items-center">
-
-                <span class="text-muted">
-
-                    Total Data :
-                    <strong>@Model.Count()</strong>
-
+        <!-- FOOTER DATA -->
+        <div class="card-footer bg-white py-3 border-x-0 border-bottom-0" style="border-top: 1px solid #eee;">
+            <div class="d-flex justify-content-between align-items-center px-2">
+                <span class="text-muted fs-7">
+                    Menampilkan total <strong>@Model.Count()</strong> data guru
                 </span>
-
-                <span class="text-muted">
-
+                <span class="text-muted fs-7 text-end">
                     Sistem Absensi Guru © 2026
-
                 </span>
-
             </div>
-
         </div>
 
     </div>
-
 </div>

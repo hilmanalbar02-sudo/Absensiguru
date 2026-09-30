@@ -1,0 +1,139 @@
+@model IEnumerable<Absensiguru.Models.Absensi>
+
+@{
+    ViewData["Title"] = "Riwayat Absensi";
+}
+
+<div class="container-fluid">
+
+    <div class="card shadow border-0">
+
+        <div class="card-header bg-danger text-white py-3">
+
+            <h3 class="mb-0">
+                <i class="bi bi-clock-history"></i>
+                Riwayat Absensi
+            </h3>
+
+        </div>
+
+        <div class="card-body">
+
+            @if (!Model.Any())
+            {
+                <div class="alert alert-warning text-center">
+
+                    Belum ada riwayat absensi.
+
+                </div>
+            }
+            else
+            {
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+
+                        <thead class="table-danger">
+
+                            <tr>
+
+                                <th>No</th>
+
+                                <th>Tanggal</th>
+
+                                <th>Jam Masuk</th>
+
+                                <th>Jam Pulang</th>
+
+                                <th>Status</th>
+
+                                <th>Keterangan</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+@{
+    int no = 1;
+}
+
+@foreach (var item in Model)
+{
+                            <tr>
+
+                                <td>@no</td>
+
+                                <td>@item.Tanggal.ToString("dd MMMM yyyy")</td>
+
+                                <td>
+
+                                    @(item.JamMasuk == null
+                                        ? "-"
+                                        : item.JamMasuk.Value.ToString("HH:mm:ss"))
+
+                                </td>
+
+                                <td>
+
+                                    @(item.JamPulang == null
+                                        ? "-"
+                                        : item.JamPulang.Value.ToString("HH:mm:ss"))
+
+                                </td>
+
+                                <td>
+
+@if(item.Status=="Hadir")
+{
+    <span class="badge bg-success">
+        Hadir
+    </span>
+}
+else if(item.Status=="Izin")
+{
+    <span class="badge bg-warning text-dark">
+        Izin
+    </span>
+}
+else if(item.Status=="Sakit")
+{
+    <span class="badge bg-info">
+        Sakit
+    </span>
+}
+else
+{
+    <span class="badge bg-danger">
+        Alpha
+    </span>
+}
+
+                                </td>
+
+                                <td>
+
+                                    @item.Keterangan
+
+                                </td>
+
+                            </tr>
+
+    no++;
+}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            }
+
+        </div>
+
+    </div>
+
+</div>
