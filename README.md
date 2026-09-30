@@ -79,4 +79,8 @@ Tabel utama:
 
 **Hilman Albar**
 
+<<<<<<< HEAD
 Mahasiswa Sistem Informasi
+=======
+Mahasiswa Sistem Informasi
+>>>>>>> 2061a89f861a013818c556f3c49ae60410c688fa
